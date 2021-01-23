@@ -773,7 +773,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"data_pariwisata_id\": 2,\n    \"kriteria_range_id\": 4\n}",
+							"raw": "{\n    \"id\": 0,\n    \"data_pariwisata_id\": 2,\n    \"kriteria_range\" : {\n        \"id\": 5\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -885,7 +885,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"data_pariwisata_id\": 2,\n    \"kriteria_range_id\": 4\n}",
+							"raw": "{\n    \"id\": 3,\n    \"data_pariwisata_id\": 2,\n    \"kriteria_range\": {\n        \"id\": 5,\n        \"kriteria_id\": 5,\n        \"nama\": \"Hotel\",\n        \"deskripsi\": \"Fasilitas hotel tempat swisata\",\n        \"nilai\": 5\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -901,6 +901,40 @@
 								"api",
 								"data_pariwisata_attribut",
 								"delete.php"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "saw",
+			"item": [
+				{
+					"name": "results",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"list_kriteria_ranges\": [\n        {\n            \"kriteria_id\": 5,\n            \"list_kriteria_ranges\": [\n                {\n                    \"kriteria_range_id\": 4\n                }\n            ]\n        },\n        {\n            \"kriteria_id\":3,\n            \"list_kriteria_ranges\": []\n        },\n        {\n            \"kriteria_id\": 2,\n            \"list_kriteria_ranges\": []\n        },\n        {\n            \"kriteria_id\": 4,\n            \"list_kriteria_ranges\": []\n        }\n    ],\n    \"offset\": 0,\n    \"limit\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}{{host}}{{port}}/api/saw/list.php",
+							"host": [
+								"{{protocol}}{{host}}{{port}}"
+							],
+							"path": [
+								"api",
+								"saw",
+								"list.php"
 							]
 						}
 					},

@@ -3,7 +3,7 @@
 // menggabungkan kode dari file result_query.php
 // yg mana result_query digunakan sebagai
 // object yg digunakan untuk hasil
-include("result_query.php");
+include_once ("result_query.php");
 
 class kriteria {
     public $id;

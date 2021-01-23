@@ -3,12 +3,13 @@
 // menggabungkan kode dari file result_query.php
 // yg mana result_query digunakan sebagai
 // object yg digunakan untuk hasil
-include("result_query.php");
+include_once ("result_query.php");
+include_once ("kriteria_range.php");
 
 class data_pariwisata_attribut {
     public $id;
     public $data_pariwisata_id;
-    public $kriteria_range_id;
+    public $kriteria_range;
  
     public function __construct(){
     }
@@ -16,7 +17,7 @@ class data_pariwisata_attribut {
     public function set($data){
         $this->id = (int) $data->id;
         $this->data_pariwisata_id = (int) $data->data_pariwisata_id;
-        $this->kriteria_range_id = (int) $data->kriteria_range_id;
+        $this->kriteria_range = $data->kriteria_range;
     }
 
     public function add($db) {
@@ -24,7 +25,7 @@ class data_pariwisata_attribut {
         $result_query->data = "ok";
         $query = "INSERT INTO data_pariwisata_attribut (data_pariwisata_id,kriteria_range_id) VALUES (?,?)";
         $stmt = $db->prepare($query);
-        $stmt->bind_param('ii',$this->data_pariwisata_id,$this->kriteria_range_id);
+        $stmt->bind_param('ii',$this->data_pariwisata_id,$this->kriteria_range->id);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error =  "error at add new data_pariwisata_attribut : ".$stmt->error;
@@ -54,7 +55,11 @@ class data_pariwisata_attribut {
         $result = $rows->fetch_assoc();
         $one->id = $result['id'];
         $one->data_pariwisata_id = $result['data_pariwisata_id'];
-        $one->kriteria_range_id = $result['kriteria_range_id'];
+ 
+        $kriteria_range = new kriteria_range();
+        $kriteria_range->id = $result['kriteria_range_id'];
+        $one->kriteria_range = $kriteria_range->one($db)->data;
+
         $result_query->data = $one;
         $stmt->close();
         return $result_query;
@@ -95,7 +100,51 @@ class data_pariwisata_attribut {
             $one = new data_pariwisata_attribut();
             $one->id = $result['id'];
             $one->data_pariwisata_id = $result['data_pariwisata_id'];
-            $one->kriteria_range_id = $result['kriteria_range_id'];
+
+            $kriteria_range = new kriteria_range();
+            $kriteria_range->id = $result['kriteria_range_id'];
+            $one->kriteria_range = $kriteria_range->one($db)->data;
+
+            array_push($all,$one);
+        }
+        $result_query->data = $all;
+        $stmt->close();
+        return $result_query;
+    }
+
+    public function allByPariwisataID($db,$pariwisataID) {
+        $result_query = new result_query();
+        $all = array();
+        $query = "SELECT 
+                    id,data_pariwisata_id,kriteria_range_id
+                FROM 
+                    data_pariwisata_attribut
+                WHERE
+                    data_pariwisata_id = ?";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param('i',$pariwisataID);
+        $stmt->execute();
+        if ($stmt->error != ""){
+            $result_query-> error = "error at query all data_pariwisata_attribut : ".$stmt->error;
+            $stmt->close();
+            return $result_query;
+        }
+        $rows = $stmt->get_result();
+        if($rows->num_rows == 0){
+            $stmt->close();
+            $result_query->data = $all;
+            return $result_query;
+        }
+
+        while ($result = $rows->fetch_assoc()){
+            $one = new data_pariwisata_attribut();
+            $one->id = $result['id'];
+            $one->data_pariwisata_id = $result['data_pariwisata_id'];
+
+            $kriteria_range = new kriteria_range();
+            $kriteria_range->id = $result['kriteria_range_id'];
+            $one->kriteria_range = $kriteria_range->one($db)->data;
+
             array_push($all,$one);
         }
         $result_query->data = $all;
@@ -108,7 +157,7 @@ class data_pariwisata_attribut {
         $result_query->data = "ok";
         $query = "UPDATE data_pariwisata_attribut SET data_pariwisata_id = ?,kriteria_range_id = ? WHERE id=?";
         $stmt = $db->prepare($query);
-        $stmt->bind_param('iii',$this->data_pariwisata_id,$this->kriteria_range_id,$this->id);
+        $stmt->bind_param('iii',$this->data_pariwisata_id,$this->kriteria_range->id,$this->id);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error = "error at update one data_pariwisata_attribut : ".$stmt->error;
