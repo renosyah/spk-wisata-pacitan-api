@@ -7,6 +7,7 @@
 class saw_query {
 
     public $list_kriteria_ranges;
+    public $kategori_id;
     public $offset;
     public $limit;
 
@@ -18,6 +19,7 @@ class saw_query {
 
     public function set($data){
         $this->list_kriteria_ranges = $data->list_kriteria_ranges;
+        $this->kategori_id = (int)$data->kategori_id;
         $this->offset = (int)$data->offset;
         $this->limit = (int)$data->limit;
     }

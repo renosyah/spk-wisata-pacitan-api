@@ -35,29 +35,46 @@ class saw {
         $result_query = new result_query();
         $all = array();
         $query = "SELECT 
-                    data_pariwisata_id
+                    at.data_pariwisata_id
                 FROM 
-                    data_pariwisata_attribut
+                    data_pariwisata_attribut at
+                INNER JOIN
+                    data_pariwisata dp
+                ON
+                    dp.id = at.data_pariwisata_id
                 WHERE
-                    kriteria_range_id IN ($criteriaRanges)
+                    dp.kategori_id = ?
+                AND
+                    at.kriteria_range_id IN ($criteriaRanges)
                 GROUP BY 
-                    data_pariwisata_id
+                    at.data_pariwisata_id
                 LIMIT ? 
                 OFFSET ?";
         $stmt = $db->prepare($query);
         $offset = $list_query->offset;
         $limit =  $list_query->limit;
-        $stmt->bind_param('ii' ,$limit, $offset);
+        $kategori_id = $list_query->kategori_id;
+        $stmt->bind_param('iii' ,$kategori_id, $limit, $offset);
         $stmt->execute();
         if ($stmt->error != ""){
-            $result_query-> error = "error at query all saw : ".$stmt->error;
-            $stmt->close();
+            $result_query->error = "error at query all saw : ".$stmt->error;
+            
+            $response = new saw_response();
+            $response->list_kriteria = $list_kriteria;
+            $response->list_hasil = array();
+        
+            $result_query->data = $response;
             return $result_query;
         }
         $rows = $stmt->get_result();
         if($rows->num_rows == 0){
             $stmt->close();
-            $result_query->data = $all;
+
+            $response = new saw_response();
+            $response->list_kriteria = $list_kriteria;
+            $response->list_hasil = array();
+        
+            $result_query->data = $response;
             return $result_query;
         }
 

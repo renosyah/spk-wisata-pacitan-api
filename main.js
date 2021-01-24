@@ -166,6 +166,7 @@ new Vue({
                         list_kriteria_ranges: list_kriteria_ranges_facilities
                     }
                 ],
+                kategori_id : this.param.category_choosed,
                 offset: 0,
                 limit: 10
             }
