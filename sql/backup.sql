@@ -28,7 +28,7 @@ CREATE TABLE `admin` (
   `username` text,
   `password` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES (3,'rovik admin','rovik','123');
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,7 +57,7 @@ CREATE TABLE `data_pariwisata` (
   PRIMARY KEY (`id`),
   KEY `kategori_id` (`kategori_id`),
   CONSTRAINT `data_pariwisata_ibfk_1` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,7 +86,7 @@ CREATE TABLE `data_pariwisata_attribut` (
   KEY `kriteria_range_id` (`kriteria_range_id`),
   CONSTRAINT `data_pariwisata_attribut_ibfk_1` FOREIGN KEY (`data_pariwisata_id`) REFERENCES `data_pariwisata` (`id`),
   CONSTRAINT `data_pariwisata_attribut_ibfk_2` FOREIGN KEY (`kriteria_range_id`) REFERENCES `kriteria_range` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +95,7 @@ CREATE TABLE `data_pariwisata_attribut` (
 
 LOCK TABLES `data_pariwisata_attribut` WRITE;
 /*!40000 ALTER TABLE `data_pariwisata_attribut` DISABLE KEYS */;
-INSERT INTO `data_pariwisata_attribut` VALUES (2,2,4),(4,2,5),(5,2,6),(6,3,7),(7,3,5);
+INSERT INTO `data_pariwisata_attribut` VALUES (2,2,4),(6,3,7),(7,3,5),(8,2,3),(9,2,7),(10,2,8),(11,2,9),(12,3,8),(13,3,9);
 /*!40000 ALTER TABLE `data_pariwisata_attribut` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,7 +112,7 @@ CREATE TABLE `kategori` (
   `deskripsi` text,
   `url_gambar` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +121,7 @@ CREATE TABLE `kategori` (
 
 LOCK TABLES `kategori` WRITE;
 /*!40000 ALTER TABLE `kategori` DISABLE KEYS */;
-INSERT INTO `kategori` VALUES (2,'Pantai','wisata pantai','/img/category_pantai.png'),(3,'Rekreasi','wisata rekreasi','/img/category_rekreasi.png'),(4,'Goa','wisata goa','/img/category_goa.png');
+INSERT INTO `kategori` VALUES (2,'Pantai','wisata pantai','/img/category_pantai.png'),(3,'Rekreasi','wisata rekreasi','/img/category_rekreasi.png'),(4,'Goa','wisata goa',NULL);
 /*!40000 ALTER TABLE `kategori` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +139,7 @@ CREATE TABLE `kriteria` (
   `nilai` float DEFAULT NULL,
   `attribut` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +168,7 @@ CREATE TABLE `kriteria_range` (
   PRIMARY KEY (`id`),
   KEY `kriteria_id` (`kriteria_id`),
   CONSTRAINT `kriteria_range_ibfk_1` FOREIGN KEY (`kriteria_id`) REFERENCES `kriteria` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,7 +177,7 @@ CREATE TABLE `kriteria_range` (
 
 LOCK TABLES `kriteria_range` WRITE;
 /*!40000 ALTER TABLE `kriteria_range` DISABLE KEYS */;
-INSERT INTO `kriteria_range` VALUES (2,5,'Tempat Parkir','Fasilitas Tempat Parkir tempat wisata',4),(3,5,'Tempat Makan','Fasilitas Tempat makan tempat wisata',6),(4,5,'Tempat Ibadah','Fasilitas Tempat makan tempat wisata',3),(5,5,'Hotel','Fasilitas hotel tempat swisata',5),(6,2,'Harga 5.000 - 10.000','harga tiket tempat swisata',3),(7,2,'Harga 10.000 - 15.000','harga tiket tempat swisata',2),(8,3,'5km - 10km','jarak tempat swisata',6),(9,4,'15 Tahun - 25 Tahun','umur untuk masuk tempat swisata',4);
+INSERT INTO `kriteria_range` VALUES (2,5,'Tempat Parkir','Fasilitas Tempat Parkir tempat wisata',4.7),(3,5,'Tempat Makan','Fasilitas Tempat makan tempat wisata',6.7),(4,5,'Tempat Ibadah','Fasilitas Tempat makan tempat wisata',3.7),(5,5,'Hotel','Fasilitas hotel tempat swisata',5.7),(6,2,'Harga 5.000 - 10.000','harga tiket tempat swisata',3.7),(7,2,'Harga 10.000 - 15.000','harga tiket tempat swisata',2.7),(8,3,'5km - 10km','jarak tempat swisata',6.7),(9,4,'15 Tahun - 25 Tahun','umur untuk masuk tempat swisata',4.7);
 /*!40000 ALTER TABLE `kriteria_range` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -189,4 +190,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-24 12:22:17
+-- Dump completed on 2021-01-25  2:43:02

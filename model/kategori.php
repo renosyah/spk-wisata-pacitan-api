@@ -18,6 +18,7 @@ class kategori {
         $this->id = (int) $data->id;
         $this->nama = $data->nama;
         $this->deskripsi = $data->deskripsi;
+        $this->url_gambar = $data->url_gambar;
     }
 
     public function add($db) {

@@ -185,7 +185,13 @@ new Vue({
         getDetail(id){
             this.switchPage("loading-page")
             axios
-                .post(this.baseUrl() + '/api/data_pariwisata/one.php',{ "id": id })
+                .post(this.baseUrl() + '/api/data_pariwisata/one.php',{ 
+                    id : id,
+                    kategori_id: 0,
+                    nama: "",
+                    deskripsi: "",
+                    lokasi: ""                   
+                })
                 .then(response => {
                     this.detail = response.data.data
                     this.switchPage("detail-page")

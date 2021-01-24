@@ -203,7 +203,7 @@
                 return {
                     kriteria_range : {
                         id: <?php echo (int) $_GET['id'];?>,
-                        id_kriteria : 0,
+                        kriteria_id : 0,
                         nama: "",
                         deskripsi : "",
                         nilai : 0

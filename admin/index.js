@@ -5,7 +5,7 @@ new Vue({
         return {
             admin : {
                 id: 0,
-                name: "",
+                nama: "",
                 username: "",
                 password: ""
             },
