@@ -8,7 +8,8 @@ CREATE TABLE admin(
 CREATE TABLE kategori(
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nama TEXT,
-    deskripsi TEXT
+    deskripsi TEXT,
+    url_gambar TEXT   
 );
 
 CREATE TABLE kriteria(

@@ -113,6 +113,8 @@ function hitungSAW($list_kriteria,$list_saw){
         array_push($response->list_hasil,$result);
     }
 
+    usort($response->list_hasil, function($a, $b) {return strcmp($b->nilai_saw, $a->nilai_saw);});
+
     return $response;
 }
 

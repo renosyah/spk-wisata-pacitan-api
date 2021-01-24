@@ -9,6 +9,7 @@ class kategori {
     public $id;
     public $nama;
     public $deskripsi;
+    public $url_gambar;
  
     public function __construct(){
     }
@@ -22,9 +23,9 @@ class kategori {
     public function add($db) {
         $result_query = new result_query();
         $result_query->data = "ok";
-        $query = "INSERT INTO kategori (nama,deskripsi) VALUES (?,?)";
+        $query = "INSERT INTO kategori (nama,deskripsi,url_gambar) VALUES (?,?,?)";
         $stmt = $db->prepare($query);
-        $stmt->bind_param('ss', $this->nama, $this->deskripsi);
+        $stmt->bind_param('ss', $this->nama, $this->deskripsi,$this->url_gambar);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error =  "error at add new kategori : ".$stmt->error;
@@ -37,7 +38,7 @@ class kategori {
     public function one($db) {
         $result_query = new result_query();
         $one = new kategori();
-        $query = "SELECT id,nama,deskripsi FROM kategori WHERE id=? LIMIT 1";
+        $query = "SELECT id,nama,deskripsi,url_gambar FROM kategori WHERE id=? LIMIT 1";
         $stmt = $db->prepare($query);
         $stmt->bind_param('i', $this->id);
         $stmt->execute();      
@@ -55,6 +56,7 @@ class kategori {
         $one->id = $result['id'];
         $one->nama = $result['nama'];
         $one->deskripsi = $result['deskripsi'];
+        $one->url_gambar = $result['url_gambar'];
         $result_query->data = $one;
         $stmt->close();
         return $result_query;
@@ -64,7 +66,7 @@ class kategori {
         $result_query = new result_query();
         $all = array();
         $query = "SELECT 
-                    id,nama,deskripsi
+                    id,nama,deskripsi,url_gambar
                 FROM 
                     kategori
                 WHERE
@@ -96,6 +98,7 @@ class kategori {
             $one->id = $result['id'];
             $one->nama = $result['nama'];
             $one->deskripsi = $result['deskripsi'];
+            $one->url_gambar = $result['url_gambar'];
             array_push($all,$one);
         }
         $result_query->data = $all;
@@ -106,9 +109,9 @@ class kategori {
     public function update($db) {
         $result_query = new result_query();
         $result_query->data = "ok";
-        $query = "UPDATE kategori SET nama = ?,deskripsi = ? WHERE id=?";
+        $query = "UPDATE kategori SET nama = ?,deskripsi = ?,url_gambar = ? WHERE id=?";
         $stmt = $db->prepare($query);
-        $stmt->bind_param('ssi', $this->nama, $this->deskripsi,$this->id);
+        $stmt->bind_param('ssi', $this->nama, $this->deskripsi,$this->url_gambar,$this->id);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error = "error at update one kategori : ".$stmt->error;

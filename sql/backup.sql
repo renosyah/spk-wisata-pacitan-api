@@ -56,7 +56,7 @@ CREATE TABLE `data_pariwisata` (
   PRIMARY KEY (`id`),
   KEY `kategori_id` (`kategori_id`),
   CONSTRAINT `data_pariwisata_ibfk_1` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +65,7 @@ CREATE TABLE `data_pariwisata` (
 
 LOCK TABLES `data_pariwisata` WRITE;
 /*!40000 ALTER TABLE `data_pariwisata` DISABLE KEYS */;
-INSERT INTO `data_pariwisata` VALUES (2,2,'Pantai pasir panjang','di pacitan','Pantai pasir panjang tempat wisata');
+INSERT INTO `data_pariwisata` VALUES (2,2,'Pantai pasir panjang','di pacitan','Pantai pasir panjang tempat wisata'),(3,2,'Pantai Gelombang asmara','di pacitan','Pantai Gelombang asmara tempat wisata');
 /*!40000 ALTER TABLE `data_pariwisata` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,7 +85,7 @@ CREATE TABLE `data_pariwisata_attribut` (
   KEY `kriteria_range_id` (`kriteria_range_id`),
   CONSTRAINT `data_pariwisata_attribut_ibfk_1` FOREIGN KEY (`data_pariwisata_id`) REFERENCES `data_pariwisata` (`id`),
   CONSTRAINT `data_pariwisata_attribut_ibfk_2` FOREIGN KEY (`kriteria_range_id`) REFERENCES `kriteria_range` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE `data_pariwisata_attribut` (
 
 LOCK TABLES `data_pariwisata_attribut` WRITE;
 /*!40000 ALTER TABLE `data_pariwisata_attribut` DISABLE KEYS */;
-INSERT INTO `data_pariwisata_attribut` VALUES (2,2,4);
+INSERT INTO `data_pariwisata_attribut` VALUES (2,2,4),(4,2,5),(5,2,6),(6,3,7),(7,3,5);
 /*!40000 ALTER TABLE `data_pariwisata_attribut` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,6 +109,7 @@ CREATE TABLE `kategori` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nama` text,
   `deskripsi` text,
+  `url_gambar` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -119,7 +120,7 @@ CREATE TABLE `kategori` (
 
 LOCK TABLES `kategori` WRITE;
 /*!40000 ALTER TABLE `kategori` DISABLE KEYS */;
-INSERT INTO `kategori` VALUES (2,'Pantai','wisata pantai'),(3,'Rekreasi','wisata rekreasi'),(4,'Goa','wisata goa');
+INSERT INTO `kategori` VALUES (2,'Pantai','wisata pantai','/img/category_pantai.png'),(3,'Rekreasi','wisata rekreasi','/img/category_rekreasi.png'),(4,'Goa','wisata goa','/img/category_goa.png');
 /*!40000 ALTER TABLE `kategori` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,7 +147,7 @@ CREATE TABLE `kriteria` (
 
 LOCK TABLES `kriteria` WRITE;
 /*!40000 ALTER TABLE `kriteria` DISABLE KEYS */;
-INSERT INTO `kriteria` VALUES (2,'Tiket Masuk','Tiket Masuk',4.4,'COST'),(3,'Jarak','Jarak tempat wisata',3.5,'COST'),(4,'Umur','umur untuk masuk tempat wisata',2.1,'BENEFIT'),(5,'Fasilitas','Fasilitas tempat wisata',3.9,'BENEFIT');
+INSERT INTO `kriteria` VALUES (2,'Tiket Masuk','Tiket Masuk',0.25,'COST'),(3,'Jarak','Jarak tempat wisata',0.25,'COST'),(4,'Umur','umur untuk masuk tempat wisata',0.25,'BENEFIT'),(5,'Fasilitas','Fasilitas tempat wisata',0.25,'BENEFIT');
 /*!40000 ALTER TABLE `kriteria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,7 +167,7 @@ CREATE TABLE `kriteria_range` (
   PRIMARY KEY (`id`),
   KEY `kriteria_id` (`kriteria_id`),
   CONSTRAINT `kriteria_range_ibfk_1` FOREIGN KEY (`kriteria_id`) REFERENCES `kriteria` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,7 +176,7 @@ CREATE TABLE `kriteria_range` (
 
 LOCK TABLES `kriteria_range` WRITE;
 /*!40000 ALTER TABLE `kriteria_range` DISABLE KEYS */;
-INSERT INTO `kriteria_range` VALUES (2,5,'Tempat Parkir','Fasilitas Tempat Parkir tempat wisata',4),(3,5,'Tempat Makan','Fasilitas Tempat makan tempat wisata',6),(4,5,'Tempat Ibadah','Fasilitas Tempat makan tempat wisata',3),(5,5,'Hotel','Fasilitas hotel tempat swisata',5);
+INSERT INTO `kriteria_range` VALUES (2,5,'Tempat Parkir','Fasilitas Tempat Parkir tempat wisata',4),(3,5,'Tempat Makan','Fasilitas Tempat makan tempat wisata',6),(4,5,'Tempat Ibadah','Fasilitas Tempat makan tempat wisata',3),(5,5,'Hotel','Fasilitas hotel tempat swisata',5),(6,2,'Harga 5.000 - 10.000','harga tiket tempat swisata',3),(7,2,'Harga 10.000 - 15.000','harga tiket tempat swisata',2),(8,3,'5km - 10km','jarak tempat swisata',6),(9,4,'15 Tahun - 25 Tahun','umur untuk masuk tempat swisata',4);
 /*!40000 ALTER TABLE `kriteria_range` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -188,4 +189,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-23 23:55:59
+-- Dump completed on 2021-01-24 12:22:17

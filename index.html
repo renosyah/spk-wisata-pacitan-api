@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>
+        SPK pariwisata Pacitan
+    </title>
+
+    <!-- CSS  -->
+    <link href='https://fonts.googleapis.com/css?family=Great Vibes' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="./css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <style>
+        #bg_pc {
+            position: fixed;
+            background-image: url('./img/bg.jpg');
+            background-clip: border-box;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;            
+        }
+
+        #bg_mobile {
+            position: fixed;
+            background-image: url('./img/bg_mobile.jpg');
+            background-clip: border-box;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;            
+        }
+
+        .custom-text-on-image-container {
+            position: relative;
+            text-align: center;
+        }
+        .custom-text-on-image-centered {
+            position: absolute;
+        }
+        .OfflineWarning {
+            overflow: hidden;
+            position: fixed;
+            top: 25px;
+            width: 100%;
+            font-size: 32px;
+            z-index: 10;
+        }
+        .bounce-enter-active {
+            animation: bounce-in .5s;
+        }
+        .bounce-leave-active {
+            animation: bounce-in .5s reverse;
+        }
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .checkbox-orange[type="checkbox"].filled-in:checked + span:not(.lever):after {
+            border: 2px solid orange;  
+            background-color:orange;
+        }
+        .range-orange[type=range]::-webkit-slider-thumb {
+            background-color: orange;
+        }
+        .range-orange[type=range]::-moz-range-thumb {
+            background-color: orange;
+        }
+        .range-orange[type=range]::-ms-thumb {
+            background-color: orange;
+        }
+        .range-orange[type=range] + .thumb {
+            background-color: #ffffff;
+        }
+        .range-orange[type=range] + .thumb.active .value {
+            color: orange;
+        }
+    </style>
+</head>
+
+<body>
+    <noscript>
+      <strong>We're sorry but SPK pariwisata Pacitan doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>  
+    <div id="app">
+        <div id="bg_pc" class="hide-on-small-only" v-show="page.name != 'loading-page' && page.name != 'result-page'"></div>
+        <div id="bg_mobile" class="hide-on-med-and-up" v-show="page.name != 'loading-page' && page.name != 'result-page'"></div>
+        
+        <div class="OfflineWarning">
+            <transition name="bounce">
+                <div class="container center" v-show="!is_online" v-on:click="is_online = true">
+                    <div class="row">
+                        <div class="col s12 m2"></div>
+                        <div class="col s12 m8">
+                            <div class="chip red white-text center">
+                                <span class="white-text">Perangkat Anda Sedang Offline! 
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col s12 m2"></div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+
+        <!-- Modal warning -->
+        <div id="modal-warning" class="modal">
+            <div class="modal-content black">
+            <h4 class="orange-text">{{ modal_warning.title }}</h4>
+            <p class="white-text">{{ modal_warning.message }}</p>
+            </div>
+            <div class="modal-footer black">
+            <a style="cursor: pointer;" class="modal-close waves-effect waves-green btn-flat white-text">Oke</a>
+            </div>
+        </div>
+
+        <!---- loading ---->
+        <div id="loading-page" v-show="page.name == 'loading-page'">
+
+            <div class="center container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12">
+                        <br /><br /><br /><br />
+                        <br /><br /><br /><br />
+                        <img src="./img/logoa.png" class="responsive-img" width="500" height="200" />
+                        <br />
+
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-green-only">
+                              <div class="circle-clipper left">
+                                <div class="circle"></div>
+                              </div><div class="gap-patch">
+                                <div class="circle"></div>
+                              </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                              </div>
+                            </div>
+                          </div>
+
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!---- category ---->
+        <div id="category-page" v-show="page.name == 'category-page'">
+
+            <div class="center container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12">
+                        <img src="./img/logoa_white.png" class="responsive-img" height="200" width="400" />
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>
+
+            <div v-for="category in categories" v-bind:key="category.id">
+                <div class="container">
+                    <div class="row">
+                        <div class="col m2 l4"></div>
+                        <div class="center col s12">
+                            <img style="cursor: pointer;" v-on:click="chooseCategory(category.id)" :src="category.url_gambar" class="responsive-img" height="80" width="300"/>
+                        </div>
+                        <div class="col m2 l4"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <!---- criteria ---->
+        <div id="criteria-page" v-show="page.name == 'criteria-page'">
+
+            <div class="center container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12">
+                        <img src="./img/logoa_white.png" class="responsive-img" height="200" width="400" /><br />
+                        <img src="./img/kriteria_logo.png" class="responsive-img" height="80" width="250" />
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col m1 l2"></div>
+                    <div class="col s12 m10 l8">   
+                        <div class="container col s12 black">
+                            <h6 class='center white-text'  data-target='facility-option'>{{ param.facility.label }}</h6>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col s1 m2 l3"></div>
+                                    <div class="col s10 m8 l6">
+
+                                        <p v-for="facility in facilities" v-bind:key="facility.id">
+                                            <label>
+                                                <input type="checkbox" class="filled-in checkbox-orange" v-bind:value="facility" v-model="param.facility.values"/>
+                                                <span>{{ facility.nama }}</span>
+                                            </label>
+                                        </p> 
+
+                                    </div>
+                                    <div class="col s1 m2 l3"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col m1 l2"></div>
+                </div>
+            </div>
+
+            <div class="center container">
+                <div class="row">
+                    <div class="col m1 l2"></div>
+                    <div class="col s12 m10 l8">   
+                        <div class="center custom-text-on-image-container">
+                            <h6 class='col s12 dropdown-trigger white-text custom-text-on-image-centered'  data-target='ticket_price-option'>{{ param.ticket_price.label }}</h6>
+                            <img src="./img/dropdown.png" class="center-align col s12" height="50" />
+                        </div>
+                        
+                        <ul id='ticket_price-option' class='dropdown-content'>
+                            <div v-for="ticket_price in ticket_prices" v-bind:key="ticket_price.id" >
+                                <li><a class="black white-text" v-on:click="param.ticket_price.label = ticket_price.nama;param.ticket_price.value = ticket_price">{{ ticket_price.nama }}</a></li>
+                            </div>
+                        </ul>
+
+                    </div>
+                    <div class="col m1 l2"></div>
+                </div>
+            </div>
+            <div class="center container">
+                <div class="row">
+                    <div class="col m1 l2"></div>
+                    <div class="col s12 m10 l8">   
+                        <div class="center custom-text-on-image-container">
+                            <h6 class='col s12 dropdown-trigger white-text custom-text-on-image-centered' data-target='distance-option'>{{ param.distance.label }}</h6>
+                            <img src="./img/dropdown.png" class="center-align col s12" height="50" />
+                        </div>
+                        
+                        <ul id='distance-option' class='dropdown-content'>
+                            <div v-for="distance in distances" v-bind:key="distance.id" >
+                                <li><a class="black white-text" v-on:click="param.distance.label = distance.nama;param.distance.value = distance">{{ distance.nama }}</a></li>
+                            </div>
+                        </ul>
+
+                    </div>
+                    <div class="col m1 l2"></div>
+                </div>
+            </div>
+            <div class="center container">
+                <div class="row">
+                    <div class="col m1 l2"></div>
+                    <div class="col s12 m10 l8">   
+                        <div class="center custom-text-on-image-container">
+                            <h6 class='col s12 dropdown-trigger white-text custom-text-on-image-centered'  data-target='age-option'>{{ param.age.label }}</h6>
+                            <img src="./img/dropdown.png" class="center-align col s12" height="50" />
+                        </div>
+                        
+                        <ul id='age-option' class='dropdown-content'>
+                            <div v-for="age in ages" v-bind:key="age.id" >
+                                <li><a class="black white-text" v-on:click="param.age.label = age.nama;param.age.value = age">{{ age.nama }}</a></li>
+                            </div>
+                        </ul>
+
+                    </div>
+                    <div class="col m1 l2"></div>
+                </div>
+            </div>
+            <div class="center container">
+                <div class="row">
+                    <div class="col s2 m2 l4"></div>
+                    <div class="center col s8 m8 l4">   
+                        <div class="center custom-text-on-image-container">
+                            <h5 class="col s12 white-text custom-text-on-image-centered" v-on:click="getSAWResult">Cari</h5> 
+                            <img src="./img/cari.png" class="col s12" height="60" />                            
+                        </div>
+                        <br /><br /><br />
+                    </div>
+                    <div class="col s2 m2 l4"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!---- result ---->
+        <div v-show="page.name == 'result-page'">
+            <div class="center container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12">
+                        <img src="./img/logoa.png" class="responsive-img" height="200" width="400" />
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>
+            <div v-if="results.length > 0">                
+                <div class="row">
+                    <div class="col m2 l3"></div>
+                    <div class="col s12 m8 l6">
+                        <table style="height:400px;width:100%;background-image : url('./img/choosed_2.png');background-repeat: no-repeat;background-size: 100% 100%;">
+                            <tr v-for="(result,index) in results" v-bind:key="result.data_pariwisata.id" v-show="index < 2">
+                                <td style="cursor: pointer;" v-on:click="getDetail(result.data_pariwisata.id)">
+                                        <div :class="{'white-text':true,'right-align' : index % 2 != 0,'left-align' : index % 2 == 0,}">
+                                        <br /><br /><h4 style="font-family: 'Great Vibes', cursive;font-size: 30px;text-shadow: 2px 2px #000000;">  {{ result.data_pariwisata.nama }} </h4>
+                                    </div> 
+                                    </td>
+                            </tr>
+                            <tr v-show="results.length == 1">
+                                <td>
+                                    <br /><br /><h4 :class="{'white-text':true,'right-align':true}"  style="font-family: 'Great Vibes', cursive;font-size: 30px;text-shadow: 2px 2px #000000;"><b>- || -</b></h4>
+                                </td>
+                            </tr>
+                        </table>                            
+                    </div>
+                    <div class="col m2 l3"></div>
+                </div>                             
+            </div>
+            <div v-else>
+                <div class="center container">
+                    <div class="row">
+                        <div class="col m2 l4"></div>
+                        <div class="col s12">   
+                            <p>-  Pariwisata tidak ditemukan -</p>
+                            <br /><br />
+                        </div>
+                        <div class="col m2 l4"></div>
+                    </div>
+               </div>
+               <div class="center container" style="width:100%;position: fixed; bottom: 0;">
+                    <div class="row">
+                        <div class="col s4 m4 l4"></div>
+                        <div class="col s4 m4 l4">   
+                            <img v-on:click="toHome" src="./img/home.png" width="50" height="50" />                      
+                        </div>
+                        <div class="col s4 m4 l4"></div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!---- detail ---->
+        <div id="detail-page" v-show="page.name == 'detail-page'">
+
+            <div class="center container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12">
+                        <img src="./img/logoa_white.png" class="responsive-img" height="200" width="400" />
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>
+
+            <div class="center container" style="background-image : url('./img/banner_bg.png');background-repeat: no-repeat;background-size: 100% 100%;">
+                <div class="row">
+                    <div class="col s12 white-text">
+                        <h4 style="font-family: 'Great Vibes', cursive;font-size: 40px;text-shadow: 2px 2px #000000;">{{ detail.nama }}</h4>   
+                    </div>
+                </div>
+                <br /><br />
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12 white-text" style="background-color:rgba(0, 0, 0, 0.5);">   
+
+                        <p>Lokasi : {{ detail.lokasi }}
+                        
+                        <p>{{ detail.deskripsi }}</p>
+
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>
+            <div class="center container" style="width:100%;position: fixed; bottom: 0;">
+                <div class="row">
+                    <div class="col s4 m4 l4"></div>
+                    <div class="col s4 m4 l4">   
+                        <img v-on:click="toHome" src="./img/home.png" width="50" height="50" />                      
+                    </div>
+                    <div class="col s4 m4 l4"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- built files will be auto injected -->
+
+    <!--  Scripts-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="./js/materialize.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./main.js"></script>
+</body>
+
+</html>
