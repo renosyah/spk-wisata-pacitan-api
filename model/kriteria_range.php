@@ -65,7 +65,7 @@ class kriteria_range {
         $stmt->close();
         return $result_query;
     }
- 
+
     public function all($db,$list_query) {
         $result_query = new result_query();
         $all = array();

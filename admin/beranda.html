@@ -138,7 +138,7 @@
                 </div>
             </div>    
         </div>
-        <!---- login ---->
+        <!---- dashboard ---->
         <div id="dashboard-page" v-show="page.name == 'dashboard-page'">
             <nav class="nav-extended black white-text">
                 <div class="nav-wrapper">
@@ -159,7 +159,7 @@
                     </ul>
                 </div>
             </nav>
-            <div id="tab-kategori" v-show="tab.name == 'tab-kategori'"  class="black white-text" style="margin:5px">
+            <div id="tab-kategori" v-show="tab.name == 'tab-kategori'" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Kategori</b></h4><br>
                 <table class="responsive-table">
                     <thead>
@@ -167,6 +167,7 @@
                         <th> Id </th>
                         <th>Nama</th>
                         <th>Deskripsi</th>
+                        <th>Opsi</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -175,18 +176,25 @@
                         <th>{{ category.nama }}</th>
                         <th>{{ category.deskripsi }}</th>
                         <th>
-                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                            <a @click="goTo('edit_data_kategori.php?id=' + category.id)" class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
                                 <i class="material-icons">edit</i>   
                             </a>
-                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                            <a @click="goTo('delete_data_kategori.php?id=' +  category.id)" class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
                                 <i class="material-icons">delete</i>  
                             </a>
                         </th>
                     </tr>
                     </tbody>
                 </table> 
+                <br /><br /><br /><br /><br /><br />
+                <a @click="goTo('add_data_kategori.html')" class="center waves-effect waves-light btn-large orange white-text" style="text-transform:none;width:100%;">
+                    <b>
+                        <span>Tambah</span>
+                    </b>    
+                </a>                
+                <br />
             </div>           
-            <div id="tab-kriteria" v-show="tab.name == 'tab-kriteria'"  class="black white-text" style="margin:5px">
+            <div id="tab-kriteria" v-show="tab.name == 'tab-kriteria'" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Kriteria</b></h4><br>
                 <table class="responsive-table">
                     <thead>
@@ -207,18 +215,25 @@
                         <th>{{ criteria.attribut }}</th>
                         <th>{{ criteria.nilai }}</th>
                         <th>
-                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                            <a @click="goTo('edit_data_kriteria.php?id=' + criteria.id)" class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
                                 <i class="material-icons">edit</i>   
                             </a>
-                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                            <a @click="goTo('delete_data_kriteria.php?id=' + criteria.id)" class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
                                 <i class="material-icons">delete</i>  
                             </a>
                         </th>
                     </tr>
                     </tbody>
-                </table> 
+                </table>
+                <br /><br /><br /><br /><br /><br />
+                <a @click="goTo('add_data_kriteria.html')" class="center waves-effect waves-light btn-large orange white-text" style="text-transform:none;width:100%;">
+                    <b>
+                        <span>Tambah</span>
+                    </b>    
+                </a>                
+                <br />                 
             </div>
-            <div id="tab-range-kriteria" v-show="tab.name == 'tab-range-kriteria'" class="black white-text" style="margin:5px">
+            <div id="tab-range-kriteria" v-show="tab.name == 'tab-range-kriteria'" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Range Kriteria</b></h4><br>
                 <table class="responsive-table">
                     <thead>
@@ -239,23 +254,31 @@
                         <th>{{ criteria_range.deskripsi }}</th>
                         <th>{{ criteria_range.nilai }}</th>
                         <th>
-                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                            <a @click="goTo('edit_data_kriteria_range.php?id=' + criteria_range.id)" class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
                                 <i class="material-icons">edit</i>   
                             </a>
-                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                            <a @click="goTo('delete_data_kriteria_range.php?id=' + criteria_range.id)" class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
                                 <i class="material-icons">delete</i>  
                             </a>
                         </th>                     
                     </tr>
                     </tbody>
-                </table>          
+                </table>
+                <br /><br /><br /><br /><br /><br />
+                <a @click="goTo('add_data_kriteria_range.html')" class="center waves-effect waves-light btn-large orange white-text" style="text-transform:none;width:100%;">
+                    <b>
+                        <span>Tambah</span>
+                    </b>    
+                </a>                
+                <br />                            
             </div>
-            <div id="tab-data-wisata" v-show="tab.name == 'tab-data-wisata'" class="black white-text" style="margin:5px">
+            <div id="tab-data-wisata" v-show="tab.name == 'tab-data-wisata'"  class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Data Pariwisata</b></h4><br>
                 <table class="responsive-table">
                     <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Id Kategori</th>
                         <th>Nama</th>
                         <th>Deskripsi</th>
                         <th>Lokasi</th>
@@ -265,50 +288,53 @@
                     <tbody>
                     <tr v-for="data_wisata in tab_data_wisata.data_wisatas" v-bind:key="data_wisata.id">
                         <th>{{ data_wisata.id }}</th>
+                        <th>{{ data_wisata.kategori_id }}</th>
                         <th>{{ data_wisata.nama }}</th>
                         <th>{{ data_wisata.deskripsi }}</th>
                         <th>{{ data_wisata.lokasi }}</th>
                         <th>
-                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                            <a  @click="goTo('edit_data_wisata.php?id=' + data_wisata.id)" class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
                                 <i class="material-icons">edit</i>   
                             </a>
-                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                            <a @click="goTo('delete_data_wisata.php?id=' + data_wisata.id)" class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
                                 <i class="material-icons">delete</i>  
                             </a>
                         </th>                     
                     </tr>
                     </tbody>
-                </table>            
+                </table> 
+                <br /><br /><br /><br /><br /><br />
+                <a @click="goTo('add_data_wisata.html')" class="center waves-effect waves-light btn-large orange white-text" style="text-transform:none;width:100%;">
+                    <b>
+                        <span>Tambah</span>
+                    </b>    
+                </a>                
+                <br />                            
             </div>
-            <div id="tab-attribut" v-show="tab.name == 'tab-attribut'" class="black white-text" style="margin:5px">
+            <div id="tab-attribut" v-show="tab.name == 'tab-attribut'" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Data Attribut</b></h4><br>
                 <table class="responsive-table">
                     <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Id Data Wisata</th>
-                        <th>Id Kriteria Range</th>
+                        <th>Nama Data Wisata</th>
+                        <th v-for="criteria in tab_criteria.criterias" v-bind:key="criteria.id">{{ criteria.nama }}</th>
                         <th>Opsi</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="attribute in tab_attribute.attributes" v-bind:key="attribute.id">
-                        <th>{{ attribute.id }}</th>
-                        <th>{{ attribute.data_pariwisata_id }}</th>
-                        <th>{{ attribute.kriteria_range.id }}</th>
+                    <tr v-for="data_wisata in tab_data_wisata.data_wisatas" v-bind:key="data_wisata.id">
+                        <th>{{ data_wisata.nama }}</th>
+                         <th v-for="criteria in tab_criteria.criterias" v-bind:key="criteria.id"><kriteria-range-by-dp-id v-bind:kid="criteria.id" v-bind:dpid="data_wisata.id"/> </th>
                         <th>
-                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
-                                <i class="material-icons">edit</i>   
-                            </a>
-                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
-                                <i class="material-icons">delete</i>  
+                            <a @click="goTo('add_data_pariwisata_attribut.php?data_pariwisata_id=' + data_wisata.id)" class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                                <i class="material-icons">add</i>   
                             </a>
                         </th>                      
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div id="tab-admin" v-show="tab.name == 'tab-admin'" class="col black white-text" style="margin:5px">
+            <div id="tab-admin" v-show="tab.name == 'tab-admin'" class="col black white-text" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Data Admin</b></h4><br>
                 <table class="responsive-table">
                     <thead>
@@ -327,16 +353,20 @@
                         <th>{{ admin.username }}</th>
                         <th>{{ admin.password }}</th>
                         <th>
-                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
-                                <i class="material-icons">edit</i>   
-                            </a>
-                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                            <a @click="goTo('delete_data_admin.php?id=' + admin.id)" class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
                                 <i class="material-icons">delete</i>  
                             </a>
                         </th>                      
                     </tr>
                     </tbody>
-                </table>            
+                </table>
+                <br /><br /><br /><br /><br /><br />
+                <a @click="goTo('add_data_admin.html')" class="center waves-effect waves-light btn-large orange white-text" style="text-transform:none;width:100%;">
+                    <b>
+                        <span>Tambah</span>
+                    </b>    
+                </a>                
+                <br />                            
             </div>
             <br /><br /><br />
         </div>

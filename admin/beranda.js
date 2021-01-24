@@ -1,3 +1,52 @@
+Vue.component('kriteria-range-by-dp-id', {
+    props : ['kid','dpid'],
+    data: function () {
+      return {
+        data : [],
+        host : {
+            name : "",
+            protocol : "",
+            port : ""
+        },
+        query : {
+            kriteria_id: this.kid,
+            data_pariwisata_id:this.dpid,
+            offset: 0,
+            limit: 10
+        }
+      }
+    },
+    template: "<div> <a class='red-text' v-for='d in data' v-bind:key='d.id' href='#' @click='goTo(d)'> [ {{ d.kriteria_range.nilai }} ] </a> </div> ",
+    created(){
+        this.setCurrentHost()
+    },
+    mounted () {;
+        this.getData()
+    },
+    methods : {
+        goTo(d){
+            window.location = this.baseUrl() + "/admin/delete_data_pariwisata_attribut.php?id=" + d.id
+        },
+        getData(){
+            axios
+                .post(this.baseUrl() + '/api/data_pariwisata_attribut/list_dp_id.php',this.query)
+                .then(response => {
+                    this.data = response.data.data
+                })
+                .catch(errors => {
+                    console.log(errors)
+                }) 
+        },
+        setCurrentHost(){
+            this.host.name = window.location.hostname
+            this.host.port = location.port
+            this.host.protocol = location.protocol.concat("//")
+        },
+        baseUrl(){
+            return this.host.protocol.concat(this.host.name + ":" + this.host.port)
+        }
+    }
+})
 
 new Vue({
     el: '#app',
@@ -104,6 +153,9 @@ new Vue({
         this.loadSession()
     },
     methods : {
+        goTo(url){
+            window.location = this.baseUrl() + "/admin/" + url
+        },
         switchPage(name){
             this.page.name = name 
         },

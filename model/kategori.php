@@ -25,7 +25,7 @@ class kategori {
         $result_query->data = "ok";
         $query = "INSERT INTO kategori (nama,deskripsi,url_gambar) VALUES (?,?,?)";
         $stmt = $db->prepare($query);
-        $stmt->bind_param('ss', $this->nama, $this->deskripsi,$this->url_gambar);
+        $stmt->bind_param('sss', $this->nama, $this->deskripsi,$this->url_gambar);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error =  "error at add new kategori : ".$stmt->error;
@@ -111,7 +111,7 @@ class kategori {
         $result_query->data = "ok";
         $query = "UPDATE kategori SET nama = ?,deskripsi = ?,url_gambar = ? WHERE id=?";
         $stmt = $db->prepare($query);
-        $stmt->bind_param('ssi', $this->nama, $this->deskripsi,$this->url_gambar,$this->id);
+        $stmt->bind_param('sssi', $this->nama, $this->deskripsi,$this->url_gambar,$this->id);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error = "error at update one kategori : ".$stmt->error;
