@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>
+       Admin
+    </title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <style>
+        #bg_pc {
+            position: fixed;
+            background-image: url('../img/bg.jpg');
+            background-clip: border-box;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;            
+        }
+
+        #bg_mobile {
+            position: fixed;
+            background-image: url('../img/bg_mobile.jpg');
+            background-clip: border-box;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;            
+        }
+
+        .custom-text-on-image-container {
+            position: relative;
+            text-align: center;
+        }
+        .custom-text-on-image-centered {
+            position: absolute;
+        }
+        .OfflineWarning {
+            overflow: hidden;
+            position: fixed;
+            top: 25px;
+            width: 100%;
+            font-size: 32px;
+            z-index: 10;
+        }
+        .bounce-enter-active {
+            animation: bounce-in .5s;
+        }
+        .bounce-leave-active {
+            animation: bounce-in .5s reverse;
+        }
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        } 
+    </style>
+</head>
+
+<body>
+    <noscript>
+      <strong>We're sorry but app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>  
+    <div id="app"> 
+        <div id="bg_pc" class="hide-on-small-only" v-show="page.name != 'loading-page'"></div>
+        <div id="bg_mobile" class="hide-on-med-and-up" v-show="page.name != 'loading-page'"></div>
+        
+        <div class="OfflineWarning">
+            <transition name="bounce">
+                <div class="container center" v-show="!is_online" v-on:click="is_online = true">
+                    <div class="row">
+                        <div class="col s12 m2"></div>
+                        <div class="col s12 m8">
+                            <div class="chip red white-text center">
+                                <span class="white-text">Perangkat Anda Sedang Offline! 
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col s12 m2"></div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <!-- Modal warning -->
+        <div id="modal-warning" class="modal">
+            <div class="modal-content black">
+            <h4 class="orange-text">{{ modal_warning.title }}</h4>
+            <p class="white-text">{{ modal_warning.message }}</p>
+            </div>
+            <div class="modal-footer black">
+            <a style="cursor: pointer;" class="modal-close waves-effect waves-green btn-flat white-text">Oke</a>
+            </div>
+        </div>
+
+        <!---- loading ---->
+        <div id="loading-page" v-show="page.name == 'loading-page'">
+
+            <div class="center container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12">
+                        <br /><br /><br /><br />
+                        <br /><br /><br /><br />
+                        <img src="../img/logoa.png" class="responsive-img" width="500" height="200" />
+                        <br />
+
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-green-only">
+                              <div class="circle-clipper left">
+                                <div class="circle"></div>
+                              </div><div class="gap-patch">
+                                <div class="circle"></div>
+                              </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                              </div>
+                            </div>
+                          </div>
+
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>    
+        </div>
+        <!---- login ---->
+        <div id="login-page" v-show="page.name == 'login-page'">
+            <div class="center container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12">
+                        <img src="../img/logoa.png" class="responsive-img" width="300" height="100" />
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>
+            <div class="valign-wrapper" style="width:100%;position: absolute;">
+                <div class="valign" style="width:100%;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s12 m8 l6 offset-m2 offset-l3">
+                            <div class="card black">
+                                <div class="card-title">
+                                    <h5 class="center white-text">
+                                        <br />
+                                        <span>Login Admin</span>
+                                    </h5>
+                                </div>
+                                <div class="card-image">
+                                </div>
+                                <div class="card-content">
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <div class="input-field">
+                                                <input id="username" type="text" class="validate black white-text" placeholder="username" v-model="admin.username">
+                                                <label for="username">
+                                                    <span>Username</span>
+                                                </label>
+                                            </div>
+                                            <div class="input-field">
+                                                <input id="password" type="text" class="validate black white-text" placeholder="password" v-model="admin.password">
+                                                <label for="password">
+                                                    <span>Password</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="center card-action">
+                                    <a class="waves-effect waves-light btn-large btn orange white-text" style="text-transform:none;width: 100%;" @click="login">
+                                        <b>
+                                            <span>Login</span>
+                                        </b>    
+                                    </a>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+    <!-- built files will be auto injected -->
+
+    <!--  Scripts-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../js/materialize.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

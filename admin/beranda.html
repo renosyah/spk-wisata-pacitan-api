@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>
+       Beranda
+    </title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <style>
+        #bg_pc {
+            position: fixed;
+            background-image: url('../img/bg.jpg');
+            background-clip: border-box;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;            
+        }
+
+        #bg_mobile {
+            position: fixed;
+            background-image: url('../img/bg_mobile.jpg');
+            background-clip: border-box;
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: -1;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;            
+        }
+
+        .custom-text-on-image-container {
+            position: relative;
+            text-align: center;
+        }
+        .custom-text-on-image-centered {
+            position: absolute;
+        }
+        .OfflineWarning {
+            overflow: hidden;
+            position: fixed;
+            top: 25px;
+            width: 100%;
+            font-size: 32px;
+            z-index: 10;
+        }
+        .bounce-enter-active {
+            animation: bounce-in .5s;
+        }
+        .bounce-leave-active {
+            animation: bounce-in .5s reverse;
+        }
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        } 
+    </style>
+</head>
+
+<body>
+    <noscript>
+      <strong>We're sorry but app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>  
+    <div id="app"> 
+        <div id="bg_pc" class="hide-on-small-only" v-show="page.name != 'loading-page'"></div>
+        <div id="bg_mobile" class="hide-on-med-and-up" v-show="page.name != 'loading-page'"></div>
+        
+        <div class="OfflineWarning">
+            <transition name="bounce">
+                <div class="container center" v-show="!is_online" v-on:click="is_online = true">
+                    <div class="row">
+                        <div class="col s12 m2"></div>
+                        <div class="col s12 m8">
+                            <div class="chip red white-text center">
+                                <span class="white-text">Perangkat Anda Sedang Offline! 
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col s12 m2"></div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <!-- Modal warning -->
+        <div id="modal-warning" class="modal">
+            <div class="modal-content black">
+            <h4 class="orange-text">{{ modal_warning.title }}</h4>
+            <p class="white-text">{{ modal_warning.message }}</p>
+            </div>
+            <div class="modal-footer black">
+            <a style="cursor: pointer;" class="modal-close waves-effect waves-green btn-flat white-text">Oke</a>
+            </div>
+        </div>
+
+        <!---- loading ---->
+        <div id="loading-page" v-show="page.name == 'loading-page'">
+
+            <div class="center container">
+                <div class="row">
+                    <div class="col m2 l4"></div>
+                    <div class="col s12">
+                        <br /><br /><br /><br />
+                        <br /><br /><br /><br />
+                        <img src="../img/logoa.png" class="responsive-img" width="500" height="200" />
+                        <br />
+
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-green-only">
+                              <div class="circle-clipper left">
+                                <div class="circle"></div>
+                              </div><div class="gap-patch">
+                                <div class="circle"></div>
+                              </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                              </div>
+                            </div>
+                          </div>
+
+                    </div>
+                    <div class="col m2 l4"></div>
+                </div>
+            </div>    
+        </div>
+        <!---- login ---->
+        <div id="dashboard-page" v-show="page.name == 'dashboard-page'">
+            <nav class="nav-extended black white-text">
+                <div class="nav-wrapper">
+                <a href="#" class="brand-logo"><img src="../img/logoa.png" class="responsive-img" width="100" height="80" style="margin-top:15px" /></a>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a @click="logout" style="color:gray">Logout ({{ admin.username }})</a></li>
+                    </ul>
+                </div>
+                <div class="nav-content">
+                    <ul class="tabs tabs-transparent">
+                        <li class="tab"><a @click="switchTab('tab-kategori')">Kategori</a></li>
+                        <li class="tab"><a @click="switchTab('tab-kriteria')">Kritera</a></li>
+                        <li class="tab"><a @click="switchTab('tab-range-kriteria')">Range Kritera</a></li>
+                        <li class="tab"><a @click="switchTab('tab-data-wisata')">Data Wisata</a></li>
+                        <li class="tab"><a @click="switchTab('tab-attribut')">Attribut</a></li>
+                        <li class="tab"><a @click="switchTab('tab-admin')">Admin</a></li>
+                        <li class="tab hide-on-med-and-up"><a @click="logout">Logout ({{ admin.username }})</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="tab-kategori" v-show="tab.name == 'tab-kategori'"  class="black white-text" style="margin:5px">
+                <h4 class="center"><b><br>Kategori</b></h4><br>
+                <table class="responsive-table">
+                    <thead>
+                    <tr>
+                        <th> Id </th>
+                        <th>Nama</th>
+                        <th>Deskripsi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="category in tab_category.categories" v-bind:key="category.id">
+                        <th>{{ category.id }} </th>
+                        <th>{{ category.nama }}</th>
+                        <th>{{ category.deskripsi }}</th>
+                        <th>
+                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                                <i class="material-icons">edit</i>   
+                            </a>
+                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                                <i class="material-icons">delete</i>  
+                            </a>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table> 
+            </div>           
+            <div id="tab-kriteria" v-show="tab.name == 'tab-kriteria'"  class="black white-text" style="margin:5px">
+                <h4 class="center"><b><br>Kriteria</b></h4><br>
+                <table class="responsive-table">
+                    <thead>
+                    <tr>
+                        <th> Id </th>
+                        <th>Nama</th>
+                        <th>Deskripsi</th>
+                        <th>Attribut</th>
+                        <th>Nilai</th>
+                        <th>Opsi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="criteria in tab_criteria.criterias" v-bind:key="criteria.id">
+                        <th>{{ criteria.id }} </th>
+                        <th>{{ criteria.nama }}</th>
+                        <th>{{ criteria.deskripsi }}</th>
+                        <th>{{ criteria.attribut }}</th>
+                        <th>{{ criteria.nilai }}</th>
+                        <th>
+                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                                <i class="material-icons">edit</i>   
+                            </a>
+                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                                <i class="material-icons">delete</i>  
+                            </a>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table> 
+            </div>
+            <div id="tab-range-kriteria" v-show="tab.name == 'tab-range-kriteria'" class="black white-text" style="margin:5px">
+                <h4 class="center"><b><br>Range Kriteria</b></h4><br>
+                <table class="responsive-table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Id Kriteria</th>
+                        <th>Nama</th>
+                        <th>Deskripsi</th>
+                        <th>Nilai</th>
+                         <th>Opsi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="criteria_range in tab_criteria_range.criteria_ranges" v-bind:key="criteria_range.id">
+                        <th>{{ criteria_range.id }}</th>
+                        <th>{{ criteria_range.kriteria_id }}</th>
+                        <th>{{ criteria_range.nama }}</th>
+                        <th>{{ criteria_range.deskripsi }}</th>
+                        <th>{{ criteria_range.nilai }}</th>
+                        <th>
+                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                                <i class="material-icons">edit</i>   
+                            </a>
+                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                                <i class="material-icons">delete</i>  
+                            </a>
+                        </th>                     
+                    </tr>
+                    </tbody>
+                </table>          
+            </div>
+            <div id="tab-data-wisata" v-show="tab.name == 'tab-data-wisata'" class="black white-text" style="margin:5px">
+                <h4 class="center"><b><br>Data Pariwisata</b></h4><br>
+                <table class="responsive-table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nama</th>
+                        <th>Deskripsi</th>
+                        <th>Lokasi</th>
+                        <th>Opsi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="data_wisata in tab_data_wisata.data_wisatas" v-bind:key="data_wisata.id">
+                        <th>{{ data_wisata.id }}</th>
+                        <th>{{ data_wisata.nama }}</th>
+                        <th>{{ data_wisata.deskripsi }}</th>
+                        <th>{{ data_wisata.lokasi }}</th>
+                        <th>
+                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                                <i class="material-icons">edit</i>   
+                            </a>
+                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                                <i class="material-icons">delete</i>  
+                            </a>
+                        </th>                     
+                    </tr>
+                    </tbody>
+                </table>            
+            </div>
+            <div id="tab-attribut" v-show="tab.name == 'tab-attribut'" class="black white-text" style="margin:5px">
+                <h4 class="center"><b><br>Data Attribut</b></h4><br>
+                <table class="responsive-table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Id Data Wisata</th>
+                        <th>Id Kriteria Range</th>
+                        <th>Opsi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="attribute in tab_attribute.attributes" v-bind:key="attribute.id">
+                        <th>{{ attribute.id }}</th>
+                        <th>{{ attribute.data_pariwisata_id }}</th>
+                        <th>{{ attribute.kriteria_range.id }}</th>
+                        <th>
+                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                                <i class="material-icons">edit</i>   
+                            </a>
+                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                                <i class="material-icons">delete</i>  
+                            </a>
+                        </th>                      
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="tab-admin" v-show="tab.name == 'tab-admin'" class="col black white-text" style="margin:5px">
+                <h4 class="center"><b><br>Data Admin</b></h4><br>
+                <table class="responsive-table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nama</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Opsi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="admin in tab_admin.admins" v-bind:key="admin.id">
+                        <th>{{ admin.id }}</th>
+                        <th>{{ admin.nama }}</th>
+                        <th>{{ admin.username }}</th>
+                        <th>{{ admin.password }}</th>
+                        <th>
+                            <a class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
+                                <i class="material-icons">edit</i>   
+                            </a>
+                            <a class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
+                                <i class="material-icons">delete</i>  
+                            </a>
+                        </th>                      
+                    </tr>
+                    </tbody>
+                </table>            
+            </div>
+            <br /><br /><br />
+        </div>
+
+    </div>
+    <!-- built files will be auto injected -->
+
+    <!--  Scripts-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../js/materialize.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="beranda.js"></script>
+</body>
+
+</html>
