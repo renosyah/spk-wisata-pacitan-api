@@ -70,7 +70,7 @@ class saw {
             $one->data_pariwisata = $one_data_pariwisata;
 
             $data_pariwisata_attribut = new data_pariwisata_attribut();
-            $list_data_pariwisata_attribut = $data_pariwisata_attribut->allByPariwisataID($db,$data_pariwisata->id)->data;
+            $list_data_pariwisata_attribut = $data_pariwisata_attribut->allByPariwisataID($db,$data_pariwisata->id,$criteriaRanges)->data;
             $one->list_data_pariwisata_attribut = $list_data_pariwisata_attribut;
 
             $one->nilai_saw = 0.0;
@@ -105,11 +105,9 @@ function hitungSAW($list_kriteria,$list_saw){
         $result->nilai_saw = 0.0;
 
         foreach ($v->list_data_pariwisata_attribut as $aa) {
-            $cm["kriteria-id-".$aa->kriteria_range->id] = $cm["kriteria-id-".$aa->kriteria_range->id] * $aa->kriteria_range->nilai;
-        }
-
-        foreach($cm as $vcm)  {
-            $result->nilai_saw += $vcm;
+            if (isset($cm["kriteria-id-".$aa->kriteria_range->kriteria_id])){               
+                $result->nilai_saw += $cm["kriteria-id-".$aa->kriteria_range->kriteria_id] * $aa->kriteria_range->nilai;
+            }
         }
 
         array_push($response->list_hasil,$result);
@@ -191,7 +189,7 @@ class min_max {
 function getMin($kriteria,$list_data_pariwisata_attribut){
     $min = new min_max();
     $min->attribut = $kriteria->attribut;
-    $min->nilai = $list_data_pariwisata_attribut[0];
+    $min->nilai = $list_data_pariwisata_attribut[0]->kriteria_range->nilai;
 	foreach ($list_data_pariwisata_attribut as $v)  {
 		if ($v->kriteria_range->kriteria_id == $kriteria->id && $v->kriteria_range->nilai < $min->nilai) {
 			$min->nilai = $v->kriteria_range->nilai;
@@ -203,7 +201,7 @@ function getMin($kriteria,$list_data_pariwisata_attribut){
 function getMax($kriteria,$list_data_pariwisata_attribut){
     $min = new min_max();
     $min->attribut = $kriteria->attribut;
-    $min->nilai = 0.0;
+    $min->nilai = $list_data_pariwisata_attribut[0]->kriteria_range->nilai;
 	foreach ($list_data_pariwisata_attribut as $v)  {
 		if ($v->kriteria_range->kriteria_id == $kriteria->id && $v->kriteria_range->nilai > $min->nilai) {
 			$min->nilai = $v->kriteria_range->nilai;

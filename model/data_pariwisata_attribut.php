@@ -112,7 +112,7 @@ class data_pariwisata_attribut {
         return $result_query;
     }
 
-    public function allByPariwisataID($db,$pariwisataID) {
+    public function allByPariwisataID($db,$pariwisataID,$criteriaRanges) {
         $result_query = new result_query();
         $all = array();
         $query = "SELECT 
@@ -120,7 +120,11 @@ class data_pariwisata_attribut {
                 FROM 
                     data_pariwisata_attribut
                 WHERE
-                    data_pariwisata_id = ?";
+                    data_pariwisata_id = ?
+                AND
+                    kriteria_range_id IN ($criteriaRanges)
+                ORDER BY
+                    id ASC";
         $stmt = $db->prepare($query);
         $stmt->bind_param('i',$pariwisataID);
         $stmt->execute();
