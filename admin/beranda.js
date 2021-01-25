@@ -16,8 +16,7 @@ Vue.component('kriteria-range-by-dp-id', {
         }
       }
     },
-    template: "<div> <a class='red-text' v-for='d in data' v-bind:key='d.id' href='#' @click='goTo(d)'> [ {{ d.kriteria_range.nilai }} ] </a> </div> ",
-    created(){
+    template: "<div> <a class='waves-effect waves-light btn-small orange white-text' style='font-size:10px;text-transform:none;margin:1px;cursor:auto' v-for='d in data' v-bind:key='d.id'>  {{ d.kriteria_range.nama }} <i class='material-icons' style='vertical-align: bottom; font-size: 18px !important;cursor:pointer' @click='goTo(d)'>close</i>  </a> </div> ",    created(){
         this.setCurrentHost()
     },
     mounted () {;
