@@ -149,6 +149,7 @@
                 </div>
                 <div class="nav-content">
                     <ul class="tabs tabs-transparent">
+                        <li class="tab"><a @click="switchTab('tab-landing')">Dashboard</a></li>
                         <li class="tab"><a @click="switchTab('tab-kategori')">Kategori</a></li>
                         <li class="tab"><a @click="switchTab('tab-kriteria')">Kritera</a></li>
                         <li class="tab"><a @click="switchTab('tab-range-kriteria')">Range Kritera</a></li>
@@ -159,6 +160,70 @@
                     </ul>
                 </div>
             </nav>
+            <div id="tab-landing" v-show="tab.name == 'tab-landing'" class="black white-text" style="margin:5px;padding:15px">
+                <h4 class="center"><b><br>Selamat Datang</b></h4><br>
+                <div class="container">
+                    <div class="row">
+                        <div class="col s12 m6 l4">
+                            <div class="card horizontal orange black-text">
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                    <h5>Kategori</h5>
+                                    <p>Olah data kategori untuk data pariwisata</p></div>
+                                    <div class="card-action">
+                                    <a href="#" @click="switchTab('tab-kategori')" class="black-text"> Lihat </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m6 l4">
+                            <div class="card horizontal orange black-text">
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                    <h5>Kriteria</h5><p>Olah data kriteria untuk perhitungan saw</p></div>
+                                    <div class="card-action">
+                                    <a href="#" class="black-text" @click="switchTab('tab-kriteria')"> Lihat </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m6 l4">
+                            <div class="card horizontal orange black-text">
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                    <h5>Range Kriteria</h5><p>Olah data kriteria range untuk menetukan attribut data pariwisata dan perhitungan saw</p></div>
+                                    <div class="card-action">
+                                    <a href="#" class="black-text" @click="switchTab('tab-range-kriteria')"> Lihat </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m6 l4">
+                            <div class="card horizontal orange black-text">
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                    <h5>Data Wisata</h5><p>Olah data wisata</p></div>
+                                    <div class="card-action">
+                                    <a href="#" class="black-text" @click="switchTab('tab-data-wisata')"> Lihat </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m6 l4">
+                            <div class="card horizontal orange black-text">
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                    <h5>Attribut</h5><p>Olah data attribut untuk data pariwisata dan perhitungan saw</p></div>
+                                    <div class="card-action">
+                                    <a href="#" class="black-text" @click="switchTab('tab-attribut')"> Lihat </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                                                                 
+                    </div>
+                </div> 
+            </div>
+
             <div id="tab-kategori" v-show="tab.name == 'tab-kategori'" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Kategori</b></h4><br>
                 <table class="responsive-table">
@@ -351,7 +416,7 @@
                         <th>{{ admin.id }}</th>
                         <th>{{ admin.nama }}</th>
                         <th>{{ admin.username }}</th>
-                        <th>{{ admin.password }}</th>
+                        <th> *** </th>
                         <th>
                             <a @click="goTo('delete_data_admin.php?id=' + admin.id)" class="col s12 waves-effect waves-light btn red white-text" style="text-transform:none;" >
                                 <i class="material-icons">delete</i>  

@@ -146,12 +146,22 @@
             </nav> 
             <div id="tab-kriteria_range" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Edit KriteriaRange</b></h4><br>
-                <div class="input-field">
-                    <input id="id-kriteria" type="number" class="validate black white-text" placeholder="id kriteria" v-model="kriteria_range.kriteria_id">
-                    <label for="id-kriteria">
-                        <span>id kriteria</span>
-                    </label>
-                </div>                 
+                <h4 class="center"><b><br>Tambah Kriteria Range</b></h4><br><br><br>
+                <div class="row">
+                    <div class="col s12 m8 l6"> 
+                        <div class="center custom-text-on-image-container">
+                            <h6 class='white-text custom-text-on-image-centered'  data-target='criteria'>{{  kriteria_choosed }}</h6>
+                                <img src="../img/dropdown.png" class="dropdown-trigger center-align" height="50" data-target='criteria' />
+                        </div>
+                        <ul id='criteria' class='dropdown-content'>
+                            <div v-for="kriteria in kriterias" v-bind:key="kriteria.id" >
+                                <li><a class="black white-text" v-on:click="kriteria_range.kriteria_id = kriteria.id; kriteria_choosed = kriteria.nama">{{ kriteria.nama }}</a></li>
+                            </div>
+                        </ul> 
+                    </div>
+                    <div class="col m2 l3"></div>
+                    <div class="col m2 l3"></div>
+                </div>                
                 <div class="input-field">
                     <input id="nama" type="text" class="validate black white-text" placeholder="nama" v-model="kriteria_range.nama">
                     <label for="nama">
@@ -201,6 +211,8 @@
             el: '#app',
             data() {
                 return {
+                    kriterias : [],
+                    kriteria_choosed : "Edit Kriteria",
                     kriteria_range : {
                         id: <?php echo (int) $_GET['id'];?>,
                         kriteria_id : 0,
@@ -235,10 +247,32 @@
                 window.$('.modal').modal();
                 this.switchPage("kriteria-range-page")
                 this.getKriteriaRange()
+                this.getCriterias()
             },
             methods : {
                 switchPage(name){
                     this.page.name = name 
+                },
+                getCriterias(){                   
+                    axios
+                        .post(this.baseUrl() + "/api/kriteria/list.php",{
+                            search_by: "id",
+                            search_value: "",
+                            order_by: "id",
+                            order_dir: "asc",
+                            offset: 0,
+                            limit: 100
+                        }).then(response => {
+                            if (response.data.error != null){
+                                this.showWarning("Perhatian",response.data.error)
+                                return
+                            }
+                            this.kriterias = response.data.data
+ 
+                        })
+                        .catch(errors => {
+                            console.log(errors)
+                        }) 
                 },
                 getKriteriaRange(){
                     axios
@@ -249,7 +283,6 @@
                                 return
                             }
                             this.kriteria_range = response.data.data
-
                         })
                         .catch(errors => {
                             console.log(errors)

@@ -70,6 +70,17 @@
             100% {
                 transform: scale(1);
             }
+        }
+        .input-field input:focus + label {
+            color: orange !important;
+        }
+        .input-field input:focus {
+            border-bottom: 1px solid orange !important;
+            box-shadow: 0 1px 0 0 orange !important;
+        }
+        .radio-orange[type="radio"].filled-in:checked + span:not(.lever):after {
+            border: 2px solid orange !important; 
+            background-color:orange !important;
         } 
     </style>
 </head>
@@ -158,12 +169,15 @@
                         <span>Deskripsi</span>
                     </label>
                 </div> 
-                <div class="input-field">
-                    <input id="attribut" type="text" class="validate black white-text" placeholder="COST/BENEFIT" v-model="kriteria.attribut">
-                    <label for="attribut">
-                        <span>Attribut</span>
-                    </label>
-                </div>                
+                <label>
+                    <input class="filled-in radio-orange" name="group1" type="radio" checked value="BENEFIT" v-model="kriteria.attribut">
+                    <span>BENEFIT</span>
+                </label>
+                <label>
+                    <input class="filled-in radio-orange" name="group1" type="radio" checked value="COST" v-model="kriteria.attribut">
+                    <span>COST</span>
+                </label>
+                <br /> <br />                   
                 <div class="input-field">
                     <input id="nilai" type="number" class="validate black white-text" placeholder="nilai" v-model="kriteria.nilai">
                     <label for="nilai">
@@ -205,7 +219,7 @@
                         id: <?php echo (int) $_GET['id'];?>,
                         nama: "",
                         deskripsi : "",
-                        attribut : "",
+                        attribut : "BENEFIT",
                         nilai : 0.0
                     },
                     page : { name : "loading-page" },

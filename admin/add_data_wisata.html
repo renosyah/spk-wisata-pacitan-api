@@ -146,12 +146,21 @@
             </nav> 
             <div id="tab-data_pariwisata" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Tambah Pariwisata</b></h4><br>
-                <div class="input-field">
-                    <input id="kategori_id" type="number" class="validate black white-text" placeholder="id kategori" v-model="data_pariwisata.kategori_id">
-                    <label for="kategori_id">
-                        <span>Id Kategori</span>
-                    </label>
-                </div>                  
+                <div class="row">
+                    <div class="col s12 m8 l6"> 
+                        <div class="center custom-text-on-image-container">
+                            <h6 class='white-text custom-text-on-image-centered' >{{  category_choosed }}</h6>
+                                <img src="../img/dropdown.png" class="dropdown-trigger center-align" height="50" data-target='category' />
+                        </div>
+                        <ul id='category' class='dropdown-content'>
+                            <div v-for="category in categories" v-bind:key="category.id" >
+                                <li><a class="black white-text" v-on:click="data_pariwisata.kategori_id = category.id; category_choosed = category.nama">{{ category.nama }}</a></li>
+                            </div>
+                        </ul> 
+                    </div>
+                    <div class="col m2 l3"></div>
+                    <div class="col m2 l3"></div>
+                </div>                                     
                 <div class="input-field">
                     <input id="nama" type="text" class="validate black white-text" placeholder="nama" v-model="data_pariwisata.nama">
                     <label for="nama">
@@ -201,6 +210,8 @@
             el: '#app',
             data() {
                 return {
+                    categories : [],
+                    category_choosed : "Pilih Kategori",
                     data_pariwisata : {
                         id: 0,
                         kategori_id : 0,
@@ -234,10 +245,32 @@
                 window.$('.dropdown-trigger').dropdown();
                 window.$('.modal').modal();
                 this.switchPage("data-pariwisata-page")
+                this.getCategories()
             },
             methods : {
                 switchPage(name){
                     this.page.name = name 
+                },
+                getCategories(){                   
+                    axios
+                        .post(this.baseUrl() + "/api/kategori/list.php",{
+                            search_by: "id",
+                            search_value: "",
+                            order_by: "id",
+                            order_dir: "asc",
+                            offset: 0,
+                            limit: 100
+                        }).then(response => {
+                            if (response.data.error != null){
+                                this.showWarning("Perhatian",response.data.error)
+                                return
+                            }
+                            this.categories = response.data.data
+ 
+                        })
+                        .catch(errors => {
+                            console.log(errors)
+                        }) 
                 },
                 addPariwisata(){
                     if (this.data_pariwisata.nama == "" || this.data_pariwisata.deskripsi == "" ){

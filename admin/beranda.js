@@ -58,7 +58,7 @@ new Vue({
                 password: ""
             },
             page : { name : "loading-page" },
-            tab : { name : "tab-kategori" },
+            tab : { name : "tab-landing" },
             tab_category : {
                 categories :[],
                 query : {

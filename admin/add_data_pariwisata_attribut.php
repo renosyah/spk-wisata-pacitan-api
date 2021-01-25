@@ -146,14 +146,23 @@
             </nav> 
             <div id="tab-kategori" class="black white-text" style="margin:5px;padding:15px">
                 <h4 class="center"><b><br>Tambah Attribut Pariwisata</b></h4><br>
-                <h6>Id Pariwisata : {{ data_pariwisata_attribut.data_pariwisata_id }}</h6>
-                <br /><br />
-                <div class="input-field">
-                    <input id="range" type="number" class="validate black white-text" placeholder="id range kriteria" v-model="data_pariwisata_attribut.kriteria_range.id">
-                    <label for="range">
-                        <span>Id Range Kriteria</span>
-                    </label>
-                </div>    
+                <div class="row">
+                    <div class="col m2 l3"></div>
+                    <div class="col s12 m8 l6"> 
+                        <h6>Id Pariwisata : {{ data_pariwisata_attribut.data_pariwisata_id }}</h6>
+                        <br /><br />
+                        <div class="center custom-text-on-image-container">
+                            <h6 class='white-text custom-text-on-image-centered' data-target='criteria-range'>{{ data_pariwisata_attribut.kriteria_range.nama }}</h6>
+                                <img src="../img/dropdown.png" class="dropdown-trigger center-align" height="50" data-target='criteria-range' />
+                        </div>
+                        <ul id='criteria-range' class='dropdown-content'>
+                            <div v-for="kriteria_range in kriteria_ranges" v-bind:key="kriteria_range.id" >
+                                <li><a class="black white-text" v-on:click="data_pariwisata_attribut.kriteria_range.id = kriteria_range.id;data_pariwisata_attribut.kriteria_range.nama = kriteria_range.nama">{{ kriteria_range.nama }}</a></li>
+                            </div>
+                        </ul>
+                    </div>
+                    <div class="col m2 l3"></div>
+                </div>                      
                 <br />
                 <a @click="addAttribut" class="center waves-effect waves-light btn-large orange white-text" style="text-transform:none;width:100%;">
                     <b>
@@ -185,11 +194,13 @@
             el: '#app',
             data() {
                 return {
+                    kriteria_ranges : [],
                     data_pariwisata_attribut : {
                         id: 0,
                         data_pariwisata_id : <?php echo (int) $_GET['data_pariwisata_id'];?>,
                         kriteria_range : {
-                            id : 0
+                            id : 0,
+                            nama : "Pilih Range Kriteria"
                         }
                     },
                     page : { name : "loading-page" },
@@ -218,13 +229,41 @@
                 window.$('.dropdown-trigger').dropdown();
                 window.$('.modal').modal();
                 this.switchPage("kategori-page")
+                this.getCriteriasRange()
             },
             methods : {
                 switchPage(name){
                     this.page.name = name 
                 },
-                addAttribut(){
+                getCriteriasRange(){
+                    
+                    axios
+                        .post(this.baseUrl() + "/api/kriteria_range/list.php",{
+                            search_by: "id",
+                            search_value: "",
+                            order_by: "id",
+                            order_dir: "asc",
+                            offset: 0,
+                            limit: 100
+                        }).then(response => {
+                            if (response.data.error != null){
+                                this.showWarning("Perhatian",response.data.error)
+                                return
+                            }
+                            this.kriteria_ranges = response.data.data
  
+                        })
+                        .catch(errors => {
+                            console.log(errors)
+                        }) 
+                },
+                addAttribut(){
+
+                    if (this.data_pariwisata_attribut.kriteria_range.id == 0){
+                        this.showWarning("Perhatian","Harap memilih!")
+                        return;
+                    }
+
                     axios
                         .post(this.baseUrl() + '/api/data_pariwisata_attribut/add.php',this.data_pariwisata_attribut)
                         .then(response => {
