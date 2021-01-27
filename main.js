@@ -168,12 +168,13 @@ new Vue({
                 ],
                 kategori_id : this.param.category_choosed,
                 offset: 0,
-                limit: 10
+                limit: 100
             }
 
             axios
                 .post(this.baseUrl() + '/api/saw/list.php',reqParam)
                 .then(response => {
+                    console.log(JSON.stringify(response.data.data))
                     this.results = response.data.data.list_hasil
                     this.switchPage("result-page")
                 })

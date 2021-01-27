@@ -42,10 +42,6 @@ class saw {
                     data_pariwisata dp
                 ON
                     dp.id = at.data_pariwisata_id
-                WHERE
-                    dp.kategori_id = ?
-                AND
-                    at.kriteria_range_id IN ($criteriaRanges)
                 GROUP BY 
                     at.data_pariwisata_id
                 LIMIT ? 
@@ -53,8 +49,7 @@ class saw {
         $stmt = $db->prepare($query);
         $offset = $list_query->offset;
         $limit =  $list_query->limit;
-        $kategori_id = $list_query->kategori_id;
-        $stmt->bind_param('iii' ,$kategori_id, $limit, $offset);
+        $stmt->bind_param('ii',$limit, $offset);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error = "error at query all saw : ".$stmt->error;
@@ -106,7 +101,8 @@ function hitungSAW($list_kriteria,$list_saw){
     $response->list_hasil = array();
 
     $minMax = getMinMax($list_kriteria, $list_saw);
-
+    $response->min_max = $minMax;
+    
     $normalize = normalize($minMax, $list_saw);
 
     foreach ($normalize as $v) {
@@ -141,14 +137,26 @@ function getMinMax($list_kriteria,$list_saw){
         foreach($list_saw as $d) {
             switch ($criteria->attribut) {
                 case "COST":
-                    $results["kriteria-id-".$criteria->id] = getMin($criteria, $d->list_data_pariwisata_attribut);
+                    if (isset($results["kriteria-id-".$criteria->id])){
+                        $holder = $results["kriteria-id-".$criteria->id];
+                        $min = getMin($criteria, $d->list_data_pariwisata_attribut);
+                        $results["kriteria-id-".$criteria->id] = $min->nilai < $holder->nilai ? $min : $holder;
+                    } else {
+                        $results["kriteria-id-".$criteria->id] = getMin($criteria, $d->list_data_pariwisata_attribut);
+                    }
                     break;
                 case "BENEFIT":
-                    $results["kriteria-id-".$criteria->id] = getMax($criteria, $d->list_data_pariwisata_attribut);
+                    if (isset($results["kriteria-id-".$criteria->id])){
+                        $holder = $results["kriteria-id-".$criteria->id];
+                        $max = getMax($criteria, $d->list_data_pariwisata_attribut);
+                        $results["kriteria-id-".$criteria->id] = $max->nilai > $holder->nilai ? $max : $holder;
+                    } else {
+                        $results["kriteria-id-".$criteria->id] = getMin($criteria, $d->list_data_pariwisata_attribut);  
+                    }
                     break;
                 default:
                     break;
-            }
+            }            
         }
     }
     return $results;   
@@ -191,6 +199,7 @@ function normalize($min_max,$list_saw){
 class saw_response {
 
     public $list_kriteria;
+    public $min_max;
     public $list_hasil;
 
     public function __construct(){
@@ -208,24 +217,36 @@ class min_max {
 function getMin($kriteria,$list_data_pariwisata_attribut){
     $min = new min_max();
     $min->attribut = $kriteria->attribut;
-    $min->nilai = $list_data_pariwisata_attribut[0]->kriteria_range->nilai;
+    $holder = 0;
 	foreach ($list_data_pariwisata_attribut as $v)  {
-		if ($v->kriteria_range->kriteria_id == $kriteria->id && $v->kriteria_range->nilai < $min->nilai) {
-			$min->nilai = $v->kriteria_range->nilai;
+        if ($v->kriteria_range->kriteria_id == $kriteria->id){
+            if ($v->kriteria_range->nilai < $holder) {
+                $holder = $v->kriteria_range->nilai;
+            }
+            if ($holder == 0){
+                $holder = $v->kriteria_range->nilai;
+            }
 		}
-	}
+    }
+    $min->nilai = $holder;
 	return $min;
 }
 
 function getMax($kriteria,$list_data_pariwisata_attribut){
     $min = new min_max();
     $min->attribut = $kriteria->attribut;
-    $min->nilai = $list_data_pariwisata_attribut[0]->kriteria_range->nilai;
+    $holder = 0;
 	foreach ($list_data_pariwisata_attribut as $v)  {
-		if ($v->kriteria_range->kriteria_id == $kriteria->id && $v->kriteria_range->nilai > $min->nilai) {
-			$min->nilai = $v->kriteria_range->nilai;
+        if ($v->kriteria_range->kriteria_id == $kriteria->id){
+            if ($v->kriteria_range->nilai > $holder) {
+                $holder = $v->kriteria_range->nilai;
+            }
+            if ($holder == 0){
+                $holder = $v->kriteria_range->nilai;
+            }
 		}
-	}
+    }
+    $min->nilai = $holder;
 	return $min;
 }
 

@@ -67,7 +67,7 @@ new Vue({
                     order_by: "id",
                     order_dir: "asc",
                     offset: 0,
-                    limit: 10
+                    limit: 100
                 }
             },
             tab_criteria : {
@@ -78,7 +78,7 @@ new Vue({
                     order_by: "id",
                     order_dir: "asc",
                     offset: 0,
-                    limit: 10
+                    limit: 100
                 }
             },
             tab_criteria_range : {
@@ -89,7 +89,7 @@ new Vue({
                     order_by: "id",
                     order_dir: "asc",
                     offset: 0,
-                    limit: 10
+                    limit: 100
                 }
             },
             tab_data_wisata : {
@@ -100,7 +100,7 @@ new Vue({
                     order_by: "id",
                     order_dir: "asc",
                     offset: 0,
-                    limit: 10
+                    limit: 100
                 }
             },
             tab_attribute : {
@@ -111,7 +111,7 @@ new Vue({
                     order_by: "id",
                     order_dir: "asc",
                     offset: 0,
-                    limit: 10
+                    limit: 100
                 }
             },
             tab_admin : {
@@ -122,7 +122,7 @@ new Vue({
                     order_by: "id",
                     order_dir: "asc",
                     offset: 0,
-                    limit: 10
+                    limit: 100
                 }
             },
             is_online : true,
