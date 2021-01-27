@@ -149,17 +149,13 @@
                 <div class="row">
                     <div class="col m2 l3"></div>
                     <div class="col s12 m8 l6"> 
-                        <h6>Id Pariwisata : {{ data_pariwisata_attribut.data_pariwisata_id }}</h6>
+                        <h6>Id Pariwisata : <?php echo (int) $_GET['data_pariwisata_id'];?> </h6>
                         <br /><br />
-                        <div class="center custom-text-on-image-container">
-                            <h6 class='white-text custom-text-on-image-centered' data-target='criteria-range'>{{ data_pariwisata_attribut.kriteria_range.nama }}</h6>
-                                <img src="../img/dropdown.png" class="dropdown-trigger center-align" height="50" data-target='criteria-range' />
+                        <div v-for="kriteria in kriterias" v-bind:key="kriteria.id">
+                            Kriteria {{ kriteria.nama }} : <kriteria-range-by-kid v-bind:kid="kriteria.id" @choosed="appendToCriteriaRanges" /> 
+                            <br /><br />
                         </div>
-                        <ul id='criteria-range' class='dropdown-content'>
-                            <div v-for="kriteria_range in kriteria_ranges" v-bind:key="kriteria_range.id" >
-                                <li><a class="black white-text" v-on:click="data_pariwisata_attribut.kriteria_range.id = kriteria_range.id;data_pariwisata_attribut.kriteria_range.nama = kriteria_range.nama">{{ kriteria_range.nama }}</a></li>
-                            </div>
-                        </ul>
+                        <br /><br /><br /><br />
                     </div>
                     <div class="col m2 l3"></div>
                 </div>                      
@@ -189,20 +185,75 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-    
+
+        Vue.component('kriteria-range-by-kid', {
+            props : ['kid'],
+            data: function () {
+            return {
+                uniquer : '-unique',
+                kriteria_range_choosed : "Pilih Kriteria Range",
+                data : [],
+                host : {
+                    name : "",
+                    protocol : "",
+                    port : ""
+                },
+                query : {
+                    search_by: "kriteria_id",
+                    search_value: this.kid,
+                    order_by: "id",
+                    order_dir: "asc",
+                    offset: 0,
+                    limit: 100
+                }
+            }
+            },
+            template: "<div> <div class='center custom-text-on-image-container'> <h6 class='white-text custom-text-on-image-centered' v-bind:data-target='kid + uniquer'>{{ kriteria_range_choosed }}</h6> <img src='../img/dropdown.png' class='dropdown-trigger center-align' height='50' v-bind:data-target='kid + uniquer' />  </div>  <ul v-bind:id='kid + uniquer' class='dropdown-content'> <div v-for='kriteria_range in data' v-bind:key='kriteria_range.id' > <li><a class='black white-text' v-on:click='onChoosed(kriteria_range)'>{{ kriteria_range.nama }}</a></li> </div></ul> </div>" ,
+            created(){
+                this.setCurrentHost()
+            },
+            mounted () {
+                window.$('.dropdown-trigger').dropdown();
+                this.getData()
+            },
+            methods : {
+                onChoosed(data){
+                    this.kriteria_range_choosed = data.nama;
+                    this.$emit('choosed',this.kid, data)
+                },
+                getData(){
+                    axios
+                        .post(this.baseUrl() + "/api/kriteria_range/list.php",this.query).then(response => {
+                            if (response.data.error != null){
+                                this.showWarning("Perhatian",response.data.error)
+                                return
+                            }
+                            this.data = response.data.data
+ 
+                        })
+                        .catch(errors => {
+                            console.log(errors)
+                        }) 
+                },
+                setCurrentHost(){
+                    this.host.name = window.location.hostname
+                    this.host.port = location.port
+                    this.host.protocol = location.protocol.concat("//")
+                },
+                baseUrl(){
+                    return this.host.protocol.concat(this.host.name + ":" + this.host.port)
+                }
+            }
+        })
+
+
+
         new Vue({
             el: '#app',
             data() {
                 return {
-                    kriteria_ranges : [],
-                    data_pariwisata_attribut : {
-                        id: 0,
-                        data_pariwisata_id : <?php echo (int) $_GET['data_pariwisata_id'];?>,
-                        kriteria_range : {
-                            id : 0,
-                            nama : "Pilih Range Kriteria"
-                        }
-                    },
+                    kriterias : [],
+                    params_kriteria_ranges : [],
                     page : { name : "loading-page" },
                     is_online : true,
                     modal_warning : {
@@ -229,16 +280,38 @@
                 window.$('.dropdown-trigger').dropdown();
                 window.$('.modal').modal();
                 this.switchPage("kategori-page")
-                this.getCriteriasRange()
+                this.getCriterias()
             },
             methods : {
                 switchPage(name){
                     this.page.name = name 
                 },
-                getCriteriasRange(){
+                appendToCriteriaRanges(kid,data){
+
+                    let data_pariwisata_attribut = {
+                            id: 0,
+                            data_pariwisata_id : <?php echo (int) $_GET['data_pariwisata_id'];?>,
+                            kriteria_range : data,
+                        }
+                    let idx = null
+                    for (let i=0; i< this.params_kriteria_ranges.length; i++) {
+                        if (this.params_kriteria_ranges[i].kriteria_range.kriteria_id == kid){
+                            idx = i
+                            break;
+                        }
+                    }
+
+                    if (idx == null) {
+                        this.params_kriteria_ranges.push(data_pariwisata_attribut)
+                        return
+                    }
+
+                    this.params_kriteria_ranges[idx] = data_pariwisata_attribut
+                },
+                getCriterias(){
                     
                     axios
-                        .post(this.baseUrl() + "/api/kriteria_range/list.php",{
+                        .post(this.baseUrl() + "/api/kriteria/list.php",{
                             search_by: "id",
                             search_value: "",
                             order_by: "id",
@@ -250,7 +323,7 @@
                                 this.showWarning("Perhatian",response.data.error)
                                 return
                             }
-                            this.kriteria_ranges = response.data.data
+                            this.kriterias = response.data.data
  
                         })
                         .catch(errors => {
@@ -259,23 +332,18 @@
                 },
                 addAttribut(){
 
-                    if (this.data_pariwisata_attribut.kriteria_range.id == 0){
-                        this.showWarning("Perhatian","Harap memilih!")
-                        return;
-                    }
-
-                    axios
-                        .post(this.baseUrl() + '/api/data_pariwisata_attribut/add.php',this.data_pariwisata_attribut)
-                        .then(response => {
-                            if (response.data.error != null){
-                                this.showWarning("Perhatian",response.data.error)
-                                return
-                            }
+                    let requests = []
+                    this.params_kriteria_ranges.forEach(e => {
+                        requests.push(axios.post(this.baseUrl() + '/api/data_pariwisata_attribut/add.php', e))
+                    })
+                   
+                    axios.all(requests)
+                        .then(axios.spread((...responses) => {
                             window.location = this.baseUrl() + "/admin/beranda.html" 
- 
-                        })
+                        }))
                         .catch(errors => {
                             console.log(errors)
+                            window.location = this.baseUrl() + "/admin/beranda.html" 
                         }) 
                 },
                 showWarning(title,message){

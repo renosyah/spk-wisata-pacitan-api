@@ -145,8 +145,7 @@
                 <a href="/admin/beranda.html" class="brand-logo"><img src="../img/logoa.png" class="responsive-img" width="100" height="80" style="margin-top:15px" /></a>
             </nav> 
             <div id="tab-kriteria_range" class="black white-text" style="margin:5px;padding:15px">
-                <h4 class="center"><b><br>Edit KriteriaRange</b></h4><br>
-                <h4 class="center"><b><br>Tambah Kriteria Range</b></h4><br><br><br>
+                <h4 class="center"><b><br>Edit Kriteria Range</b></h4><br><br><br>
                 <div class="row">
                     <div class="col s12 m8 l6"> 
                         <div class="center custom-text-on-image-container">
