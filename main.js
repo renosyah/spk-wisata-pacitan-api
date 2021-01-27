@@ -174,7 +174,6 @@ new Vue({
             axios
                 .post(this.baseUrl() + '/api/saw/list.php',reqParam)
                 .then(response => {
-                    console.log(JSON.stringify(response.data.data))
                     this.results = response.data.data.list_hasil
                     this.switchPage("result-page")
                 })
