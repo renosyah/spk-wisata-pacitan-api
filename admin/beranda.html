@@ -70,7 +70,20 @@
             100% {
                 transform: scale(1);
             }
-        } 
+        }
+        .switch-orange label .lever {
+            background-color: #bdbdbd;
+        }
+        .switch-orange label input[type=checkbox]:checked+.lever {
+            background-color: orange;
+        }
+
+        .switch-orange label .lever:after {
+            background-color: #616161;
+        }
+        .switch-orange label input[type=checkbox]:checked+.lever:after {
+            background-color: white;
+        }   
     </style>
 </head>
 
@@ -308,7 +321,8 @@
                         <th>Nama</th>
                         <th>Deskripsi</th>
                         <th>Nilai</th>
-                         <th>Opsi</th>
+                        <th>Tampilkan</th>
+                        <th>Opsi</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -318,6 +332,15 @@
                         <th>{{ criteria_range.nama }}</th>
                         <th>{{ criteria_range.deskripsi }}</th>
                         <th>{{ criteria_range.nilai }}</th>
+                        <th>
+                            <div class="switch switch-orange">
+                                <label>                                    
+                                    <input v-bind:checked="criteria_range.status==0" type="checkbox">
+                                    <span class="lever" @click="updateCriteriaRangeStatus(criteria_range)"></span>
+                                    
+                                </label>
+                            </div>
+                        </th>
                         <th>
                             <a @click="goTo('edit_data_kriteria_range.php?id=' + criteria_range.id)" class="col s12 waves-effect waves-light btn orange white-text" style="text-transform:none;">
                                 <i class="material-icons">edit</i>   

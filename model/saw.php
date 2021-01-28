@@ -42,6 +42,8 @@ class saw {
                     data_pariwisata dp
                 ON
                     dp.id = at.data_pariwisata_id
+                WHERE
+                    dp.kategori_id = ?
                 GROUP BY 
                     at.data_pariwisata_id
                 LIMIT ? 
@@ -49,7 +51,8 @@ class saw {
         $stmt = $db->prepare($query);
         $offset = $list_query->offset;
         $limit =  $list_query->limit;
-        $stmt->bind_param('ii',$limit, $offset);
+        $kategori_id = $list_query->kategori_id;
+        $stmt->bind_param('iii' ,$kategori_id, $limit, $offset);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error = "error at query all saw : ".$stmt->error;

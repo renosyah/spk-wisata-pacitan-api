@@ -11,6 +11,7 @@ class kriteria_range {
     public $nama;
     public $deskripsi;
     public $nilai;
+    public $status;
  
     public function __construct(){
     }
@@ -21,14 +22,15 @@ class kriteria_range {
         $this->nama = $data->nama;
         $this->deskripsi = $data->deskripsi;
         $this->nilai = $data->nilai;
+        $this->status = $data->status;
     }
 
     public function add($db) {
         $result_query = new result_query();
         $result_query->data = "ok";
-        $query = "INSERT INTO kriteria_range (kriteria_id,nama,deskripsi,nilai) VALUES (?,?,?,?)";
+        $query = "INSERT INTO kriteria_range (kriteria_id,nama,deskripsi,nilai,status) VALUES (?,?,?,?,?)";
         $stmt = $db->prepare($query);
-        $stmt->bind_param('issd',$this->kriteria_id, $this->nama, $this->deskripsi, $this->nilai);
+        $stmt->bind_param('issdi',$this->kriteria_id, $this->nama, $this->deskripsi, $this->nilai, 0);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error =  "error at add new kriteria_range : ".$stmt->error;
@@ -41,7 +43,7 @@ class kriteria_range {
     public function one($db) {
         $result_query = new result_query();
         $one = new kriteria_range();
-        $query = "SELECT id,kriteria_id,nama,deskripsi,nilai FROM kriteria_range WHERE id=? LIMIT 1";
+        $query = "SELECT id,kriteria_id,nama,deskripsi,nilai,status FROM kriteria_range WHERE id=? LIMIT 1";
         $stmt = $db->prepare($query);
         $stmt->bind_param('i', $this->id);
         $stmt->execute();      
@@ -61,6 +63,7 @@ class kriteria_range {
         $one->nama = $result['nama'];
         $one->deskripsi = $result['deskripsi'];
         $one->nilai = $result['nilai'];
+        $one->status = $result['status'];
         $result_query->data = $one;
         $stmt->close();
         return $result_query;
@@ -70,7 +73,7 @@ class kriteria_range {
         $result_query = new result_query();
         $all = array();
         $query = "SELECT 
-                    id,kriteria_id,nama,deskripsi,nilai 
+                    id,kriteria_id,nama,deskripsi,nilai,status
                 FROM 
                     kriteria_range
                 WHERE
@@ -104,6 +107,7 @@ class kriteria_range {
             $one->nama = $result['nama'];
             $one->deskripsi = $result['deskripsi'];
             $one->nilai = $result['nilai'];
+            $one->status = $result['status'];
             array_push($all,$one);
         }
         $result_query->data = $all;
@@ -114,9 +118,9 @@ class kriteria_range {
     public function update($db) {
         $result_query = new result_query();
         $result_query->data = "ok";
-        $query = "UPDATE kriteria_range SET kriteria_id = ?,nama = ?,deskripsi = ?,nilai = ? WHERE id=?";
+        $query = "UPDATE kriteria_range SET kriteria_id = ?,nama = ?,deskripsi = ?,nilai = ?,status = ? WHERE id=?";
         $stmt = $db->prepare($query);
-        $stmt->bind_param('issdi',$this->kriteria_id, $this->nama, $this->deskripsi,$this->nilai,$this->id);
+        $stmt->bind_param('issdii',$this->kriteria_id, $this->nama, $this->deskripsi,$this->nilai,$this->status,$this->id);
         $stmt->execute();
         if ($stmt->error != ""){
             $result_query->error = "error at update one kriteria_range : ".$stmt->error;

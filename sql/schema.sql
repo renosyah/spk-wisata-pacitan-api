@@ -26,6 +26,7 @@ CREATE TABLE kriteria_range(
     nama TEXT,
     deskripsi TEXT,
     nilai FLOAT,
+    status INT
     FOREIGN KEY (kriteria_id) REFERENCES kriteria(id)
 );
 

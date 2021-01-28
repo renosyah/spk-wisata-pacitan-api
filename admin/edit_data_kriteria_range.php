@@ -217,7 +217,8 @@
                         kriteria_id : 0,
                         nama: "",
                         deskripsi : "",
-                        nilai : 0
+                        nilai : 0,
+                        status : 0
                     },
                     page : { name : "loading-page" },
                     is_online : true,

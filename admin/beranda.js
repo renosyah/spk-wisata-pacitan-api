@@ -186,6 +186,31 @@ new Vue({
                     this.switchPage("dashboard-page")
                 }) 
         },
+        updateCriteriaRangeStatus(d){
+ 
+            let param = {
+                id: d.id,
+                kriteria_id: d.kriteria_id,
+                nama: d.nama,
+                deskripsi: d.deskripsi,
+                nilai: d.nilai,
+                status : d.status == 0 ? 1 : 0
+            }
+ 
+
+            axios
+                .post(this.baseUrl() + '/api/kriteria_range/update.php',param)
+                .then(response => {
+                    if (response.data.error != null){
+                        this.showWarning("Perhatian",response.data.error)
+                        return
+                    }
+
+                })
+                .catch(errors => {
+                    console.log(errors)
+                }) 
+        },
         loadSession(){
             if (window.localStorage && window.localStorage.getItem('admin_session')) {
                 this.admin = JSON.parse(window.localStorage.getItem('admin_session'))

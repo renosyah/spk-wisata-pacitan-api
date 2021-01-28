@@ -214,7 +214,7 @@
                                     <div class="col s10 m8 l6">
 
                                         <p v-for="facility in facilities" v-bind:key="facility.id">
-                                            <label>
+                                            <label v-show='facility.status == 0'>
                                                 <input type="checkbox" class="filled-in checkbox-orange" v-bind:value="facility" v-model="param.facility.values"/>
                                                 <span>{{ facility.nama }}</span>
                                             </label>
