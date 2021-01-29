@@ -173,6 +173,8 @@ class data_pariwisata_attribut {
                     data_pariwisata_attribut
                 WHERE
                     data_pariwisata_id = ?
+                AND
+                    kriteria_range_id IN ($criteriaRanges)
                 ORDER BY
                     id ASC";
         $stmt = $db->prepare($query);

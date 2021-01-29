@@ -44,6 +44,8 @@ class saw {
                     dp.id = at.data_pariwisata_id
                 WHERE
                     dp.kategori_id = ?
+                AND
+                    at.kriteria_range_id IN ($criteriaRanges)
                 GROUP BY 
                     at.data_pariwisata_id
                 LIMIT ? 
