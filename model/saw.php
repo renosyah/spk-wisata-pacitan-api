@@ -156,7 +156,7 @@ function getMinMax($list_kriteria,$list_saw){
                         $max = getMax($criteria, $d->list_data_pariwisata_attribut);
                         $results["kriteria-id-".$criteria->id] = $max->nilai > $holder->nilai ? $max : $holder;
                     } else {
-                        $results["kriteria-id-".$criteria->id] = getMin($criteria, $d->list_data_pariwisata_attribut);  
+                        $results["kriteria-id-".$criteria->id] = getMax($criteria, $d->list_data_pariwisata_attribut);  
                     }
                     break;
                 default:
